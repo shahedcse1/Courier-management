@@ -1,0 +1,17 @@
+.portletval {
+    background-color: #F5AB35;
+    border: 1px solid #F5AB35;
+}
+
+.table-background {
+    background-color:#7575a3;
+    color: white;
+}
+.linkstyle{
+    color:white;
+    text-decoration: none;
+}
+.linkstyle:hover{
+    color:white;
+    text-decoration: none;
+}
