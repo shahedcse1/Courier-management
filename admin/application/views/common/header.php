@@ -98,7 +98,7 @@
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
                         <a href="<?= base_url(); ?>">
-                            <img src="<?= base_url('uploads/logo.jpg'); ?>" width="70px;"height="35px;" alt="logo" class="logo-default" /> </a>
+                            <img src="<?= base_url('uploads/logo-black.png'); ?>" width="70px;"height="35px;" alt="logo" class="logo-default" /> </a>
                         <div class="menu-toggler sidebar-toggler">
                             <span></span>
                         </div>
@@ -121,13 +121,13 @@
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <img alt="" class="img-circle" src="<?= base_url('uploads/').$this->session->userdata('image_path');?>" />
-                                    <span class="username username-hide-on-mobile"><?= $this->session->userdata('user_name');?></span>
+                                    <img alt="" class="img-circle" src="<?= base_url('uploads/') . $this->session->userdata('image_path'); ?>" />
+                                    <span class="username username-hide-on-mobile" style="color:red;"><b><?= $this->session->userdata('user_name'); ?></b></span>
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
-                                        <a href="<?= base_url('profile');?>">
+                                        <a href="<?= base_url('profile'); ?>">
                                             <i class="icon-user"></i> My Profile </a>
                                     </li>
                                     <li>

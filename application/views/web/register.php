@@ -48,7 +48,7 @@
     [data-tooltip]:after {
         visibility: hidden;
         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-        filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+        filter:DXImageTransform.Microsoft.Alpha(Opacity=0);
         opacity: 0;
         pointer-events: none;
     }
@@ -95,7 +95,7 @@
     [data-tooltip]:hover:after {
         visibility: visible;
         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-        filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+        filter: DXImageTransform.Microsoft.Alpha(Opacity=100);
         opacity: 1;
     }
 </style>

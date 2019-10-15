@@ -65,7 +65,7 @@
     </style>
 </head>
 
-<div id="preloader">
+<!--<div id="preloader">
     <div class="small1">
         <div class="small ball smallball1"></div>
         <div class="small ball smallball2"></div>
@@ -77,6 +77,16 @@
         <div class="small ball smallball6"></div>
         <div class="small ball smallball7"></div>
         <div class="small ball smallball8"></div>
+    </div>
+
+    <div class="bigcon">
+        <div class="big ball"></div>
+    </div>
+</div> -->
+<div id="preloader">
+
+    <div class="small2">
+        <img  src="<?= base_url('assets/img/logo/logo-black.png'); ?>" />
     </div>
 
     <div class="bigcon">

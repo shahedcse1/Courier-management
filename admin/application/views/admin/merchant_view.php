@@ -32,9 +32,10 @@
                                             <thead class="table-background">
                                                 <tr>
                                                     <th class="text-center">Serial</th>
+
                                                     <th class="text-center">Merchant Name </th>
+                                                    <th class="text-center">Option </th>
                                                     <th class="text-center">Merchant Phone </th>
-                                                    <th class="text-center">Email </th>
                                                     <th class="text-center">Address </th>
                                                     <th class="text-center">Company/Page Name </th>
                                                     <th class="text-center">payment </th>
@@ -49,9 +50,20 @@
                                                         ?>
                                                         <tr>
                                                             <td><?= $i; ?></td>
-                                                            <td><?= $value->name; ?></td>
+                                                            <td>
+                                                                <a href="#">
+                                                                    <?= $value->name; ?>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+
+                                                                <button class="btn btn-subscribe btn-circle  btn-xs"
+                                                                        onclick="showsettings()">
+                                                                    <i class="fa fa-pencil"></i>plan Settings
+                                                                </button>
+
+                                                            </td>
                                                             <td><?= $value->phone; ?></td>
-                                                            <td><?= $value->email; ?></td>
                                                             <td><?= $value->address; ?></td>
                                                             <td><?= $value->company_name ?></td>
                                                             <td><?php
@@ -84,3 +96,67 @@
         </div>
 
     </div>
+
+    <div class="modal fade" id="settingmodal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header table-background">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Settings info.</h4>
+                </div>
+                <div class="modal-body col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group col-md-10">
+                            <label>Price Plan :</label>
+                            <select name="price_plan" id="price_plan"
+                                    class="col-md-12 brand   btn-sm dropdown-toggle"
+                                    required>
+                                <option value="">--Select Plan--</option>
+                                <?php if (isset($priceplan)): ?>
+                                    <?php foreach ($priceplan AS $val): ?>
+                                        <option value="<?= $val->id; ?>"><?= $val->plan_type; ?> - <?= $val->price; ?></option>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group col-md-10">
+                            <label>Weight Plan :</label>
+                            <select name="weight_plan" id="weight_plan"
+                                    class="col-md-12 brand  btn-sm dropdown-toggle"
+                                    required>
+                                <option value="">--Select Plan--</option>
+                                <?php if (isset($weightplan)): ?>
+                                    <?php foreach ($weightplan AS $val): ?>
+                                        <option value="<?= $val->id; ?>"><?= $val->plan; ?> - <?= $val->price; ?></option>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-primary" id="add">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showsettings() {
+            $('#settingmodal').modal('show');
+
+        }
+
+    </script>
+

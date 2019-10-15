@@ -59,7 +59,7 @@
               .css({
                 'width': '',
                 'position': '',
-                'top': ''
+                'top': 0
               });
             s.stickyElement.parent().removeClass(s.className);
             s.stickyElement.trigger('sticky-end', [s]);

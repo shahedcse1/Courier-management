@@ -4,8 +4,8 @@
 </div>
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
-<div class="page-footer" style="background-color:#FAD91B;">
-    <div class="text-center" style="color:#FAD91B;">
+<div class="page-footer" style="background-color:#1B2757;">
+    <div class="text-center" style="color:#fff;">
         <a target="_blank" href="https://www.facebook.com/shahed.cse">Design And Developed by Shahed cse</a>
         <a href="#" class="go-top ">
             <i class="fa fa-angle-up"></i>

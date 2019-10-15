@@ -11,9 +11,9 @@
                         <div class="col-md-7" style="padding: 20px;">
                             <img class="pt-10 effect animated fadeInLeft" alt="" src="<?= base_url('assets/img/icons/icon-1.png') ?>" />
                             <h2 class="section-title fs-48 effect animated wow fadeInUp" data-wow-offset="50" data-wow-delay=".20s"> <span class="theme-clr" style="color:#e0262c;"> parcel xpress </span>  <span class="theme-clr" style="color: #e0262c;"> BD </span><br><h4 style="color:red">Delivery On time With Care .</h4></h2>
-                            <h4 class="section-title fs-40 effect animated wow fadeInUp" data-wow-offset="50" data-wow-delay=".20s"><img height="50" width="50" src="<?= base_url('assets/img/icons/5a452570546ddca7e1fcbc7d.png') ?>" /> <span class="theme-clr" style="color: black;">+880-1842775001 </span> </h4>
+                            <h4 class="section-title fs-40 effect animated wow fadeInUp" data-wow-offset="50" data-wow-delay=".20s"><img height="50" width="50" src="<?= base_url('assets/img/icons/5a452570546ddca7e1fcbc7d.png') ?>" /> <span class="theme-clr" style="color: #fff;">+880-1842775001 </span> </h4>
                         </div>
-                        <div class="col-md-5" style=" background-color: #82e38f;color:black ">
+                        <div class="col-md-5" style=" background-color: #1B2757;color:#fff; ">
                             <div class="calculate-form" >
                                 <h4>Register Now - It's Free!</h4>
                                 <form class="row" action="<?= base_url('home/register'); ?>" method="post" >
@@ -157,11 +157,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 wow slideInUp" data-wow-offset="50"style="background-color:#FAD91B; " data-wow-delay=".20s">
+                            <div class="col-md-4 wow slideInUp" data-wow-offset="50"style="background-color:#1B2757;color:#fff; " data-wow-delay=".20s">
                                 <div class="pricing-box clrbg-before clrbg-after transition">
                                     <div class="title-wrap text-center">
                                         <img alt="" src="<?= base_url('assets/img/icons/icon-4.png') ?>" class="wow fadeInUp" data-wow-offset="50" data-wow-delay=".20s" />
-                                        <h2 class="section-title fs-16">Cash On Delivery</h2> 
+                                        <h2 class="section-title fs-16" style="color:#fff;">Cash On Delivery</h2> 
                                         <p>We collect cash on behalf of you! </p>
                                     </div>
                                 </div>
@@ -186,11 +186,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 wow slideInUp" data-wow-offset="50"style="background-color:#FAD91B; " data-wow-delay=".20s">
+                            <div class="col-md-4 wow slideInUp" data-wow-offset="50"style="background-color:#1B2757;color:#fff; " data-wow-delay=".20s">
                                 <div class="pricing-box clrbg-before clrbg-after transition">
                                     <div class="title-wrap text-center">
                                         <img alt="" src="<?= base_url('assets/img/icons/icon-4.png') ?>" class="wow fadeInUp" data-wow-offset="50" data-wow-delay=".20s" />
-                                        <h2 class="section-title fs-16">Faster Payment </h2>
+                                        <h2 class="section-title fs-16" style="color:#fff;">Faster Payment </h2>
                                         <p>Get your payment daily by cash, Mobile Wallet or Bank deposit/Transfer!  </p>
                                     </div>
                                 </div>

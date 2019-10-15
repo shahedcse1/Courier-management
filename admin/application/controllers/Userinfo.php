@@ -2,10 +2,9 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class UserInfo extends CI_Controller
-{
-    public function __construct()
-    {
+class UserInfo extends CI_Controller {
+
+    public function __construct() {
         parent::__construct();
 
         $this->load->model('common');
@@ -15,8 +14,7 @@ class UserInfo extends CI_Controller
         }
     }
 
-    public function index()
-    {
+    public function index() {
         if (in_array($this->session->userdata('user_role'), array(1))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'userinfo';
@@ -33,9 +31,8 @@ class UserInfo extends CI_Controller
             redirect('auth');
         endif;
     }
-    
-    public function allmerchant()
-    {
+
+    public function allmerchant() {
         if (in_array($this->session->userdata('user_role'), array(1))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'All Merchant';
@@ -43,6 +40,8 @@ class UserInfo extends CI_Controller
             $data['sub_menu'] = 'merchant';
             $data['users2'] = $this->common->userData2();
             $data['role'] = $this->common->viewAll('userrole');
+            $data['priceplan'] = $this->common->viewAll('price_plan');
+            $data['weightplan'] = $this->common->viewAll('weight_plan');
 
             $this->load->view('common/header', $data);
             $this->load->view('common/sidebar', $data);
@@ -53,8 +52,7 @@ class UserInfo extends CI_Controller
         endif;
     }
 
-    public function addUser()
-    {
+    public function addUser() {
         $post['name'] = $this->input->post('name');
         $post['company_name'] = $this->input->post('company_name');
         $post['email'] = $this->input->post('email');
@@ -93,8 +91,7 @@ class UserInfo extends CI_Controller
         redirect('userinfo');
     }
 
-    public function editUser()
-    {
+    public function editUser() {
         $id = $this->input->post('id');
         $output = $this->common->edit('users', $id, 'id');
 
@@ -113,8 +110,7 @@ class UserInfo extends CI_Controller
         echo json_encode($data);
     }
 
-    public function updateUser()
-    {
+    public function updateUser() {
         $id = $this->input->post('id');
         $post = $this->input->post();
         $user_pin = $this->session->userdata('user_pin');
@@ -141,8 +137,7 @@ class UserInfo extends CI_Controller
         redirect('userinfo');
     }
 
-    public function updatePass()
-    {
+    public function updatePass() {
         $id = $this->input->post('id');
         $npassword = $this->input->post('npassword');
         $rpassword = $this->input->post('rpassword');
@@ -165,21 +160,18 @@ class UserInfo extends CI_Controller
         endif;
     }
 
-    public function deleteUser()
-    {
+    public function deleteUser() {
         $id = $this->input->post('id');
         if ($id) :
             $this->common->delete('users', $id, 'id');
         endif;
     }
 
-    public function checkPin()
-    {
+    public function checkPin() {
         echo $this->common->checkPin($this->input->get('pin'));
     }
 
-    public function changePin()
-    {
+    public function changePin() {
         $pin = $this->input->post('pin');
         $id = $this->input->post('id');
         $getdata = $this->common->getPin($id, $pin);

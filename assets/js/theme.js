@@ -8,7 +8,7 @@ var testimonialSlider = $('.testimonial-slider');
 var countdownTimer1 = $("#countdown-timer1");
 var wowDiv = $('body > main div');
 
-$(window).on('load', function () {
+$(window).on('load', function() {
     /*------- Preloader --------*/
     $('#preloader').delay(1000).fadeOut(200);
 
@@ -19,9 +19,9 @@ $(window).on('load', function () {
     /*------------------- ./Style Switcher Files  -------------------*/
 });
 
-$(window).on('scroll', function () {
+$(window).on('scroll', function() {
     /*------- Scroll To Top --------*/
-    if ($(this).scrollTop() > 100) {
+    if ($(this).scrollTop() > 50) {
         toTop.css({bottom: '0px'});
     }
     else {
@@ -30,31 +30,31 @@ $(window).on('scroll', function () {
 
 });
 
-$(function () {
+$(function() {
 
     // --------------------------- Sticky Header ------------------------ //
-    (function () {
-        if ($(window).width() > 760) {
+    (function() {
+        if ($(window).width() > 360) {
             $(".menu-bar").sticky({topSpacing: 0});
         }
     }());
 
     /*------- Search Popup --------*/
-    (function ($) {
+    (function($) {
         'use strict';
         // Popup for Menu and Search Links in the Header
-        $('.search').on('click', function () {
+        $('.search').on('click', function() {
             searchPopup.fadeIn(250);
             $('.search-popup .search-query').focus();
         });
-        $('.close-search').on('click', function () {
+        $('.close-search').on('click', function() {
             searchPopup.fadeOut(250);
         });
     })($);
 
     /*------- Scroll To Top Animate --------*/
-    (function () {
-        toTop.click(function () {
+    (function() {
+        toTop.click(function() {
             $('html, body').animate({scrollTop: 0}, 800);
             return false;
         });
@@ -81,9 +81,9 @@ $(function () {
     }
 
     /* --------------------------- Coundown Timer ------------------------ */
-    (function () {
+    (function() {
         if (countdownTimer1.length) {
-            countdownTimer1.countdown("2017/05/18", function (event) {
+            countdownTimer1.countdown("2017/05/18", function(event) {
                 var $this = $(this).html(event.strftime(''
                         + '<span>%D</span> days '
                         + '<span>%H</span> hours '
@@ -94,16 +94,16 @@ $(function () {
     }());
 
     /*------- Calculator --------*/
-    (function () {
+    (function() {
 
         if (typeof $.fn.databinder == 'undefined')
         {
             return;
         }
 
-        $('.calculate-form').on('changed.bs.select', function () {
+        $('.calculate-form').on('changed.bs.select', function() {
             $(this).trigger('recalculate');
-        }).on('keyup', ':input', function () {
+        }).on('keyup', ':input', function() {
             $(this).trigger('recalculate');
         }).databinder({
             money: {
@@ -112,7 +112,7 @@ $(function () {
                 thousands: ' ',
                 cutzero: false
             },
-            calculate: function (data, callback) {
+            calculate: function(data, callback) {
                 try {
                     // Example: minimal cost
                     data.min = 15;

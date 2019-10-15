@@ -76,9 +76,9 @@ $query_builder = TRUE;
 
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'parcelxp_bduser';
-$db['default']['password'] = '?S~8f!BKlO}Y';
-$db['default']['database'] = 'parcelxp_bd';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
+$db['default']['database'] = 'xpressbd';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
