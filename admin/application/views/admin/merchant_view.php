@@ -56,12 +56,17 @@
                                                                 </a>
                                                             </td>
                                                             <td>
-
-                                                                <button class="btn btn-subscribe btn-circle  btn-xs"
-                                                                        onclick="showsettings()">
-                                                                    <i class="fa fa-pencil"></i>plan Settings
-                                                                </button>
-
+                                                                <?php if (empty($value->price_plan)): ?>
+                                                                    <button class="btn btn-subscribe btn-circle  btn-xs"
+                                                                            onclick="showsettings(<?= $value->id; ?>)">
+                                                                        <i class="fa fa-pencil"></i>plan Settings
+                                                                    </button>
+                                                                <?php else: ?>
+                                                                    <button class="btn btn-success btn-circle  btn-xs"
+                                                                            onclick="showsettings(<?= $value->id; ?>)">
+                                                                        <i class="fa fa-pencil"></i>plan update
+                                                                    </button>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td><?= $value->phone; ?></td>
                                                             <td><?= $value->address; ?></td>
@@ -100,62 +105,79 @@
     <div class="modal fade" id="settingmodal" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header table-background">
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close"><span
-                            aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Settings info.</h4>
-                </div>
-                <div class="modal-body col-md-12">
-                    <div class="col-md-12">
-                        <div class="form-group col-md-10">
-                            <label>Price Plan :</label>
-                            <select name="price_plan" id="price_plan"
-                                    class="col-md-12 brand   btn-sm dropdown-toggle"
-                                    required>
-                                <option value="">--Select Plan--</option>
-                                <?php if (isset($priceplan)): ?>
-                                    <?php foreach ($priceplan AS $val): ?>
-                                        <option value="<?= $val->id; ?>"><?= $val->plan_type; ?> - <?= $val->price; ?></option>
-                                        <?php
-                                    endforeach;
-                                endif;
-                                ?>
-                            </select>
+            <form action="<?= base_url('Userinfo/set_settings'); ?>" method="post">
+                <div class="modal-content">
+                    <div class="modal-header table-background">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Settings info.</h4>
+                    </div>
+                    <div class="modal-body col-md-12">
+                        <div class="col-md-12">
+                            <div class="form-group col-md-10">
+                                <label>Price Plan :</label>
+                                <input type="hidden" id="user_id" name="user_id" class="form-control">
+                                <select name="price_plan" id="price_plan"
+                                        class="col-md-12 brand   btn-sm dropdown-toggle"
+                                        required >
+                                    <option value="">--Select Plan--</option>
+                                    <?php if (isset($priceplan)): ?>
+                                        <?php foreach ($priceplan AS $val): ?>
+                                            <option value="<?= $val->id; ?>"><?= $val->plan_type; ?> - <?= $val->price; ?></option>
+                                            <?php
+                                        endforeach;
+                                    endif;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group col-md-10">
+                                <label>Weight Plan :</label>
+                                <select name="weight_plan" id="weight_plan"
+                                        class="col-md-12 brand  btn-sm dropdown-toggle"
+                                        required >
+                                    <option value="">--Select Plan--</option>
+                                    <?php if (isset($weightplan)): ?>
+                                        <?php foreach ($weightplan AS $val): ?>
+                                            <option value="<?= $val->id; ?>"><?= $val->plan; ?> - <?= $val->price; ?></option>
+                                            <?php
+                                        endforeach;
+                                    endif;
+                                    ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group col-md-10">
-                            <label>Weight Plan :</label>
-                            <select name="weight_plan" id="weight_plan"
-                                    class="col-md-12 brand  btn-sm dropdown-toggle"
-                                    required>
-                                <option value="">--Select Plan--</option>
-                                <?php if (isset($weightplan)): ?>
-                                    <?php foreach ($weightplan AS $val): ?>
-                                        <option value="<?= $val->id; ?>"><?= $val->plan; ?> - <?= $val->price; ?></option>
-                                        <?php
-                                    endforeach;
-                                endif;
-                                ?>
-                            </select>
-                        </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-primary" id="add">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer ">
-                    <button type="submit" class="btn btn-primary" id="add">Update</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
     <script>
-        function showsettings() {
-            $('#settingmodal').modal('show');
 
+        function showsettings(id) {
+            var user_id = id;
+            $('#user_id').val(user_id);
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('Userinfo/getDetailsData'); ?>",
+                data: 'id=' + user_id,
+                success: function(data) {
+                    var outputData = JSON.parse(data);
+                    var response = outputData.userdata;
+
+                    $("#price_plan").val(response.price_plan);
+                    $("#weight_plan").val(response.weight_plan);
+                    $('#settingmodal').modal('show');
+                }
+            });
         }
 
     </script>

@@ -38,7 +38,7 @@
                                                         <?php if ($this->session->userdata('user_role') == 1): ?>
                                                             <td>
                                                                 <?php if ($receivable->collect_frmod == 0): ?>
-                                                                    <?php if (!empty($receivable->date)): ?>
+                                                                    <?php if (!empty($receivable->date) || $receivable->final_status == 7): ?>
                                                                         <button class="btn btn-primary btn-circle btn-xs requestReceive" title="Receive from Delivery Man"><i class="fa fa-money"></i></button>
                                                                     <?php endif; ?>
                                                                 <?php else: ?>
@@ -49,8 +49,11 @@
                                                         <td>
                                                             <?php if (!empty($receivable->date)): ?>
                                                                 <?= date("d F, Y", strtotime($receivable->date)); ?>
+                                                            <?php elseif ($receivable->final_status == 7): ?>
+                                                                <button class="btn btn-subscribe btn-danger btn-xs " title="Pay to Merchant">product canceled by customer</button>
                                                             <?php else: ?>
                                                                 <button class="btn btn-subscribe btn-danger btn-xs " title="Pay to Merchant">Not Delivered yet!</button>
+
                                                             <?php endif; ?>
                                                         </td>
                                                         <td><?= $receivable->trackingId; ?></td>

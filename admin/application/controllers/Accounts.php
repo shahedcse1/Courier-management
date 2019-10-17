@@ -153,7 +153,7 @@ class Accounts extends CI_Controller {
                 ->select('accounts.id as id')
                 ->select('request.tracking_id as trackingId')
                 ->select('accounts.netprice as price')
-                 ->select('request.customer_name as customer_name')
+                ->select('request.customer_name as customer_name')
                 ->from('accounts')
                 ->join('request', 'accounts.request_id = request.id')
                 ->where('accounts.paidtomarchent', 0)
@@ -166,10 +166,40 @@ class Accounts extends CI_Controller {
         echo json_encode($payables, JSON_PRETTY_PRINT);
     }
 
+    public function adjust_due() {
+        $userId = $this->input->post('userId');
+        $adjust = $this->db
+                ->select('accounts.id as id')
+                ->select('request.tracking_id as trackingId')
+                ->select('accounts.delivery_cost as price')
+                ->select('request.customer_name as customer_name')
+                ->from('accounts')
+                ->join('request', 'accounts.request_id = request.id')
+                ->where('accounts.paidtomarchent', 0)
+                ->where('request.request_by', $userId)
+                ->where_in('request.final_status ', array(7))
+                ->order_by('request.tracking_id', 'asc')
+                ->get()
+                ->result();
+
+        echo json_encode($adjust, JSON_PRETTY_PRINT);
+    }
+
     public function payableProduct() {
         $id = $this->input->post('id');
         $payables = $this->db
                 ->select('netprice as price')
+                ->from('accounts')
+                ->where('id', $id)
+                ->get()
+                ->row();
+
+        echo json_encode($payables, JSON_PRETTY_PRINT);
+    }
+       public function payableProduct2() {
+        $id = $this->input->post('id');
+        $payables = $this->db
+                ->select('delivery_cost as price')
                 ->from('accounts')
                 ->where('id', $id)
                 ->get()
@@ -189,6 +219,7 @@ class Accounts extends CI_Controller {
                     ->select('accounts.id as id')
                     ->select('accounts.paidtomarchent as paidtomarchent')
                     ->select('request.deliverydate as date')
+                    ->select('request.final_status as final_status')
                     ->select('request.tracking_id as trackingId')
                     ->select('users.company_name as company')
                     ->select('users.phone as phone')
@@ -196,7 +227,7 @@ class Accounts extends CI_Controller {
                     ->from('accounts')
                     ->join('request', 'accounts.request_id = request.id')
                     ->join('users', 'request.request_by = users.id')
-                    //    ->where('accounts.paidtomarchent', 0)
+                    ->where('request.final_status <>', 7)
                     ->order_by('accounts.paid_marchent_date', 'asc')
                     ->get()
                     ->result();
@@ -219,6 +250,7 @@ class Accounts extends CI_Controller {
             $data['receivables'] = $this->db
                     ->select('request.deliverydate as date')
                     ->select('request.tracking_id as trackingId')
+                    ->select('request.final_status as final_status')
                     ->select('accounts.id as id')
                     ->select('accounts.netprice as price')
                     ->from('accounts')
@@ -233,6 +265,7 @@ class Accounts extends CI_Controller {
             $data['receivables'] = $this->db
                     ->select('request.deliverydate as date')
                     ->select('request.tracking_id as trackingId')
+                    ->select('request.final_status as final_status')
                     ->select('users.company_name as company')
                     ->select('staffs.name as deliveryMan')
                     ->select('staffs.phone as deliveryManPhone')

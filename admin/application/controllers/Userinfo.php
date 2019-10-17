@@ -52,6 +52,40 @@ class UserInfo extends CI_Controller {
         endif;
     }
 
+    public function set_settings() {
+        if (in_array($this->session->userdata('user_role'), array(1))) :
+            $data['base_url'] = $this->config->item('base_url');
+            $id = $this->input->post('user_id');
+            $userdata = array(
+                'price_plan' => $this->input->post('price_plan'),
+                'weight_plan' => $this->input->post('weight_plan')
+            );
+            $status = $this->common->update('users', $id, $userdata);
+
+            if ($status):
+                $this->session->set_userdata('add', 'Plan Settings Successfully');
+            else:
+                $this->session->set_userdata('notadd', 'Plan Settings failed');
+            endif;
+
+            redirect('userinfo/allmerchant');
+
+        else :
+            redirect('auth');
+        endif;
+    }
+
+    function getDetailsData() {
+        $id = $this->input->post('id');
+        $query1 = $this->db->query("SELECT price_plan,weight_plan FROM users WHERE users.id = '$id'  ");
+        $dataresult = $query1->row();
+        $outputData = array(
+            'userdata' => $dataresult,
+        );
+
+        echo json_encode($outputData);
+    }
+
     public function addUser() {
         $post['name'] = $this->input->post('name');
         $post['company_name'] = $this->input->post('company_name');

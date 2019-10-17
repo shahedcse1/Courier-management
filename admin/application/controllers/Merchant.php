@@ -51,7 +51,6 @@ class Merchant extends CI_Controller {
                 if (!empty($ids)):
                     $requestData = array(
                         'final_status' => 6,
-                        'delivery_cost' => 60,
                         'delivery_man' => $this->input->post('delivery_man'),
                         'outfordeliverydate' => date('Y-m-d')
                     );
@@ -60,11 +59,12 @@ class Merchant extends CI_Controller {
                     $this->db->update('request', $requestData);
 
                     foreach ($ids as $id):
-                        $priceqr = $this->db->query("SELECT netprice FROM request WHERE id=$id")->row()->netprice;
+                        $priceqr = $this->db->query("SELECT netprice,delivery_cost FROM request WHERE id=$id")->row();
+                        $price = $priceqr->netprice;
                         $accountsData = array(
                             'request_id' => $id,
-                            'netprice' => $priceqr,
-                            'delivery_cost' => 60,
+                            'netprice' => $price,
+                            'delivery_cost' => $priceqr->delivery_cost,
                             'paid_marchent_date' => '0000-00-00',
                             'coll_frmd_date' => '0000-00-00'
                         );
@@ -125,15 +125,35 @@ class Merchant extends CI_Controller {
         endif;
     }
 
+    function update_cancel() {
+        $id = $this->input->get('id');
+        $notes = $this->input->get('notes');
+        $charge = $this->input->get('collect_frmod');
+        $Datanotes = [
+            'final_status' => 7,
+            'cancel_notes' => $notes
+        ];
+        $this->db->where('id', $id);
+        $this->db->Update('request', $Datanotes);
+        $Datanotes2 = [
+            'collect_frmod' => $charge
+        ];
+        $this->db->where('request_id', $id);
+        $this->db->Update('accounts', $Datanotes2);
+    }
+
     function update_delay() {
         $id = $this->input->get('id');
         $notes = $this->input->get('notes');
         $Datanotes = [
+            'final_status' => 4,
+            'delivery_man' => '',
             'delay_notes' => $notes
         ];
         $this->db->where('id', $id);
-        $status = $this->db
-                ->Update('request', $Datanotes);
+        $this->db->Update('request', $Datanotes);
+        $this->db->where('request_id', $id);
+        $this->db->delete('accounts');
     }
 
     public function complainList() {
@@ -285,6 +305,8 @@ class Merchant extends CI_Controller {
             $data['zones'] = $this->common->viewAll('zone');
             $data['district'] = $this->common->viewAll('district_govt');
             $data['weight'] = $this->common->viewAll('weight_info');
+            $userid = $this->session->userdata('user_id');
+            $data['priceplan'] = $this->db->query("SELECT price_plan FROM users WHERE id='$userid'")->row()->price_plan;
 
             $this->load->view('common/header', $data);
             $this->load->view('common/sidebar', $data);
@@ -354,6 +376,8 @@ class Merchant extends CI_Controller {
     public function request_save_multiple() {
         if (in_array($this->session->userdata('user_role'), array(2))) :
             $created_by = $this->session->userdata("user_id");
+            $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
+            $deliverycost = $settings_query->pprice;
             $maxidqr = $this->db->query("SELECT MAX(id) AS MAX FROM request ");
             $max = $maxidqr->row()->MAX;
 
@@ -375,6 +399,7 @@ class Merchant extends CI_Controller {
                     'order_no' => $this->input->post('order_no')[$i],
                     'netprice' => $this->input->post('netprice')[$i] ? $this->input->post('netprice')[$i] : 0.00,
                     'product_price' => $this->input->post('netprice')[$i] ? $this->input->post('netprice')[$i] : 0.00,
+                    'delivery_cost' => $deliverycost,
                     'quantity' => 1,
                     'request_by' => $created_by,
                     'final_status' => 1
@@ -430,6 +455,20 @@ class Merchant extends CI_Controller {
     public function request_save() {
         if (in_array($this->session->userdata('user_role'), array(2))) :
             $created_by = $this->session->userdata("user_id");
+            $pweight = $this->input->post('weight');
+            $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
+            if ($pweight == 1 || $pweight == 2):
+                $deliverycost = $settings_query->pprice;
+            elseif ($pweight == 3):
+                $deliverycost = $settings_query->pprice + $settings_query->wprice;
+            elseif ($pweight == 4):
+                $deliverycost = $settings_query->pprice + ($settings_query->wprice * 2);
+            elseif ($pweight == 5):
+                $deliverycost = $settings_query->pprice + ($settings_query->wprice * 3);
+            elseif ($pweight == 6):
+                $deliverycost = $settings_query->pprice + ($settings_query->wprice * 4);
+            endif;
+
             $maxidqr = $this->db->query("SELECT MAX(id) AS MAX FROM request ");
             $max = $maxidqr->row()->MAX;
 
@@ -464,7 +503,8 @@ class Merchant extends CI_Controller {
                 'd_address' => $this->input->post('address'),
                 'customer_name' => $this->input->post('customer_name'),
                 'customer_phone' => $this->input->post('customer_phone'),
-                'p_weight' => $this->input->post('weight'),
+                'p_weight' => $pweight,
+                'delivery_cost' => $deliverycost,
                 'product_price' => $this->input->post('p_price'),
                 'quantity' => $this->input->post('quantity'),
                 'netprice' => $this->input->post('total_price'),
@@ -599,7 +639,6 @@ class Merchant extends CI_Controller {
                 elseif ($status == 6):
                     $requestData = array(
                         'final_status' => $status,
-                        'delivery_cost' => $this->input->post('delivery_cost'),
                         'delivery_man' => $this->input->post('delivery_man'),
                         'outfordeliverydate' => date('Y-m-d')
                     );
@@ -670,6 +709,8 @@ class Merchant extends CI_Controller {
     function file_upload() {
 
         $created_by = $this->session->userdata("user_id");
+        $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
+        $deliverycost = $settings_query->pprice;
         $maxidqr = $this->db->query("SELECT MAX(id) AS MAX FROM request ");
         $max = $maxidqr->row()->MAX;
 
@@ -742,6 +783,7 @@ class Merchant extends CI_Controller {
                                             'netprice' => $rowData[0][4],
                                             'order_no' => $rowData[0][5],
                                             'quantity' => 1,
+                                            'delivery_cost' => $deliverycost,
                                             'final_status' => 1,
                                             'zoneid' => 11,
                                             'request_by' => $created_by,

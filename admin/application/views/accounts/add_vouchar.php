@@ -1,6 +1,11 @@
 <style>
     #trackId {
-        height: 200px;
+        height: 180px;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+    #trackId2 {
+        height: 100px;
         overflow-x: scroll;
         overflow-y: scroll;
     }
@@ -42,18 +47,59 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-md-2">Select payable tracking Id:</label>
-                                        <div class="col-md-10" style="background-color:#dbf0f3; " id="trackId"></div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="amount" class="control-label col-md-2">Total Amount:</label>
-                                        <div class="col-md-10">
+                                        <div class="col-md-6" style="background-color:#dbf0f3; " id="trackId"></div>
+                                        <div class="col-md-4">
                                             <input type="text"
                                                    name="amount"
                                                    id="amount"
                                                    readonly
                                                    value="0.00"
+                                                   class="form-control" required="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Adjust due from cancel product:</label>
+                                        <div class="col-md-6" style="background-color: #ecaab4; " id="trackId2"></div>
+                                        <div class="col-md-4">
+                                            <input type="text"
+                                                   name="amount1"
+                                                   id="amount1"
+                                                   readonly
+                                                   value="0.00"
                                                    class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="amount" class="control-label col-md-2"></label>
+                                        <div class="col-md-5">
+                                            <button type="button" onclick="calculate_amount();" class="btn-large btn btn-success">Calculate Total Amount</button>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <input type="text"
+                                                   name="amount2"
+                                                   id="amount2"
+                                                   readonly
+                                                   value=""
+                                                   class="form-control" required="" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="amount" class="control-label col-md-2">COD (%):</label>
+
+                                        <div class="col-md-4">
+                                            <input type="text"
+                                                   name="amount3"
+                                                   id="amount3" onkeypress="calculate_cod();"
+                                                   class="form-control" required="" />
+                                        </div>
+                                        <label for="amount" class="control-label col-md-2">Merchant Amount  :</label>
+
+                                        <div class="col-md-4">
+                                            <input type="text"
+                                                   name="amount4"
+                                                   id="amount4" readonly=""
+                                                   class="form-control" required="" />
                                         </div>
                                     </div>
 
@@ -98,9 +144,26 @@
                 </div>
             </div>
         </div>
-        <script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
+
     </div>
 </div>
+<script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
+<script>
+                                                       function calculate_amount() {
+                                                           var payval = $("#amount").val();
+                                                           var adjust = $("#amount1").val();
+
+                                                           var total_amount = payval - adjust;
+                                                           $("#amount2").val(total_amount);
+                                                       }
+
+                                                       function calculate_cod() {
+                                                           var totlval = $("#amount2").val();
+                                                           var cod = $("#amount3").val();
+                                                           var merchat_amount = Math.floor((totlval / cod) * 100);
+                                                           $("#amount4").val(merchat_amount);
+                                                       }
+</script>
 
 
 
