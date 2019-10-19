@@ -16,6 +16,9 @@ $('#marchent_name').change(function() {
         },
         success: function(data) {
             var payableList = '';
+           if(data.length==0){
+               alert('Sorry ! No payable ids are available right now');
+           }
             for (var i = 0; i < data.length; i++) {
                 payableList += '<label for="tracking' + data[i].trackingId + '"><input type="checkbox" ' +
                         'class="payable-list" ' +
@@ -39,12 +42,12 @@ $('#marchent_name').change(function() {
         success: function(data) {
             var adjust_list = '';
             for (var i = 0; i < data.length; i++) {
-                adjust_list += '<label for="tracking' + data[i].trackingId + '"><input type="checkbox" ' +
+                adjust_list += '<label for="tracking2' + data[i].trackingId + '"><input type="checkbox" ' +
                         'class="adjust-list" ' +
                         'data-id="' + data[i].id + '" ' +
-                        'name="tracking[]" ' +
-                        'id="tracking' + data[i].trackingId + '" ' +
-                        'value="' + data[i].id + '" /> ' + data[i].trackingId + '--৳' + data[i].price + ' -- For ' + data[i].customer_name + '</label><br />';
+                        'name="tracking2[]" ' +
+                        'id="tracking2' + data[i].trackingId + '" ' +
+                        'value="' + data[i].id + '" /> ' + data[i].trackingId + '--৳' + data[i].price + ' -- Charge For ' + data[i].customer_name + '</label><br />';
 
             }
             $("#trackId2").html(adjust_list);

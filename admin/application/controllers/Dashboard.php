@@ -30,7 +30,11 @@ class Dashboard extends CI_Controller {
         $data['user_name'] = $this->db->query("SELECT  name from users where user_pin='$user_pin'")->row()->name;
         $today = date('Y-m-d');
         $user_id = $this->session->userdata("user_id");
-       
+
+        if ($user_role == 2):
+            $data['newvouchar'] = $this->db->query("SELECT COUNT(id) AS new FROM vouchar where seenby_merchant='0' AND paid_to='$user_id'")->row()->new;
+        endif;
+
         /**
          * Pending Parcels
          */

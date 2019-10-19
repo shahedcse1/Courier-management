@@ -51,7 +51,7 @@
                                                         <tr>
                                                             <td><?= $i; ?></td>
                                                             <td>
-                                                                <a href="#">
+                                                                <a href="<?= base_url('Merchant/allrequest_list?id=' . $value->id); ?>">
                                                                     <?= $value->name; ?>
                                                                 </a>
                                                             </td>

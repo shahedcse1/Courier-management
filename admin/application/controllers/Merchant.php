@@ -241,6 +241,54 @@ class Merchant extends CI_Controller {
         endif;
     }
 
+    public function allrequest_list($status = false) {
+        if (!in_array($this->session->userdata('user_role'), [1, 2, 3])) {
+            redirect('auth');
+        }
+
+        $data['base_url'] = $this->config->item('base_url');
+        $data['title'] = 'All Request List' . '<br>' . 'Parcel Xpress BD.' . '<br>' . 'Date:' . date('d-m-Y');
+        $role = $this->session->userdata('user_role');
+        $data['role'] = $role;
+        $data['status'] = $status;
+        $data['active_menu'] = $role == 2 ? 'merchant' : 'requestlist';
+        $data['sub_menu'] = $role == 2 ? 'request' : '';
+
+        $deliverymanqr = $this->db->query("SELECT * FROM staffs WHERE category=3 order by name asc");
+        $data['deliveryman'] = $deliverymanqr->result();
+
+        $userId = $this->input->get("id");
+
+        $this->db
+                ->select('request.*')
+                ->select('users.name')
+                ->select('users.company_name')
+                ->select('users.phone')
+                ->select('zone.zone_name')
+                ->select('status.status_name')
+                ->select('status.color')
+                ->from('request')
+                ->join('zone', 'zone.id = request.zoneid')
+                ->join('users', 'users.id = request.request_by')
+                ->join('status', 'status.id = request.final_status')
+                ->where('request.request_by', $userId);
+
+
+
+
+
+        $data['requestinfo'] = $this->db
+                ->order_by('status.ordr_by', 'asc')
+                ->get()
+                ->result();
+
+
+        $this->load->view('common/header', $data);
+        $this->load->view('common/sidebar', $data);
+        $this->load->view('merchant/request_list', $data);
+        $this->load->view('common/footer', $data);
+    }
+
     public function requestlist($status = false) {
         if (!in_array($this->session->userdata('user_role'), [1, 2, 3])) {
             redirect('auth');

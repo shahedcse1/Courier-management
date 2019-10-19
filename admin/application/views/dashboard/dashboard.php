@@ -19,7 +19,7 @@
         <?php if ($roleId == 2): ?>
             <div class="cl-md-12 text-center">
                 <div>
-                    <a class="btn btn-danger" href="<?= base_url('accounts/vouchar') ?>">Accounts Voucher</a>
+                    <a class="btn btn-danger" href="<?= base_url('accounts/vouchar') ?>">Accounts Voucher </a>
                     <a class="btn btn-primary" href="<?= base_url('merchant/requestlist') ?>">Your All Request List</a>
                     <a class="btn btn-success" href="<?= base_url('merchant/makerequest') ?>">Place New Order</a>
                 </div><br>
@@ -125,8 +125,35 @@
     <script src="<?= base_url('assets/highcharts/exporting.js') ?>"></script>
     <script src="<?= base_url('assets/highcharts/export-data.js') ?>"></script>
     <script src="<?= base_url('assets/highcharts/highcharts-more.js') ?>"></script>
+    <div class="modal fade fade modal-auto-clear" id="voucharmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header table-background">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Vouchar alert.
+                </div>
+                <div class="modal-body col-md-12">
+                    <h1>Hello dear,You have <?= $newvouchar; ?> new Invoice vouchar from parcel xpress BD.Please check it</h1><br>
+                    <center>
+                        <a class="btn btn-danger" href="<?= base_url('accounts/vouchar') ?>">Accounts Voucher   (<?= $newvouchar; ?>) </a>
+                    </center>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
-
+<?php if ($roleId == 2 && !empty($newvouchar)): ?>
+            $(document).ready(function() {
+                $('#voucharmodal').modal('show');
+            });
+<?php endif; ?>
         var chart = Highcharts.chart('container', {
             title: {
                 text: 'Month Wise Total Delivery'

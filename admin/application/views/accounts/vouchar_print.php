@@ -70,19 +70,31 @@
                                                                                     ?>
                                                                                 </td>
                                                                                 <td style="text-align: center"><?= $nooftracking ?></td>
-                                                                                <td style="text-align: center"><?= $allinfo->total_amount; ?></td>
+                                                                                <td style="text-align: center"><?= $allinfo->payable_amount; ?></td>
                                                                             </tr>
                                                                         </tbody>
 
                                                                     </table>
-                                                                    <table style="float: right; text-align:right; width:100%; font-size: 12px; font-weight: bold">                                       
+                                                                    <table style=" text-align:right; width:100%; font-size: 12px; font-weight: bold;margin-bottom: 5px;">                                       
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td>Sub Total: </td>
-                                                                                <td id="invoiceamount1" style="text-align:right"><?= $allinfo->total_amount ?>.00</td>
+                                                                                <td>Product Total: </td>
+                                                                                <td id="invoiceamount1" style="text-align:right"><?= $allinfo->payable_amount ?></td>
+                                                                            </tr> 
+                                                                            <tr>
+                                                                                <td>COD: </td>
+                                                                                <td id="invoiceamount1" style="text-align:right"><?= $allinfo->COD ?> %</td>
+                                                                            </tr> 
+                                                                            <tr>
+                                                                                <td>Adjust Due From cancel product charge: </td>
+                                                                                <td id="invoiceamount1" style="text-align:right;color:red;"> - <?= $allinfo->adjustable_amount ?></td>
+                                                                            </tr> 
+                                                                            <tr>
+                                                                                <td>Total Paid Amount: </td>
+                                                                                <td id="invoiceamount1" style="text-align:right"><?= $allinfo->total_amount ?></td>
                                                                             </tr> 
                                                                         </tbody>
-                                                                    </table> <br><br>
+                                                                    </table> <br><br><br>
                                                                     <table style="float: right; text-align:left; width:100%;">                                       
                                                                         <tbody>
                                                                             <tr>
@@ -131,37 +143,37 @@
         <script src="<?= base_url('assets/js/custom/payable.js'); ?>" type="text/javascript"></script>
     </div>
     <script>
-                                function printDiv2(divName) {
-                                    var receivedid = '<?php echo $allinfo->id ?>';
-                                    $.ajax({
-                                        type: "POST",
-                                        dataType: 'json',
-                                        url: base_url + 'accounts/updateby_marchent',
-                                        data: {
-                                            receivedid: receivedid
-                                        }
-                                    });
+                                    function printDiv2(divName) {
+                                        var receivedid = '<?php echo $allinfo->id ?>';
+                                        $.ajax({
+                                            type: "POST",
+                                            dataType: 'json',
+                                            url: base_url + 'accounts/updateby_marchent',
+                                            data: {
+                                                receivedid: receivedid
+                                            }
+                                        });
 
 
-                                    var printContents = document.getElementById(divName).innerHTML;
-                                    var originalContents = document.body.innerHTML;
+                                        var printContents = document.getElementById(divName).innerHTML;
+                                        var originalContents = document.body.innerHTML;
 
-                                    document.body.innerHTML = printContents;
+                                        document.body.innerHTML = printContents;
 
-                                    window.print();
+                                        window.print();
 
-                                    document.body.innerHTML = originalContents;
-                                }
+                                        document.body.innerHTML = originalContents;
+                                    }
 
-                                function printDiv(divName) {
-                                    var printContents = document.getElementById(divName).innerHTML;
-                                    var originalContents = document.body.innerHTML;
+                                    function printDiv(divName) {
+                                        var printContents = document.getElementById(divName).innerHTML;
+                                        var originalContents = document.body.innerHTML;
 
-                                    document.body.innerHTML = printContents;
+                                        document.body.innerHTML = printContents;
 
-                                    window.print();
+                                        window.print();
 
-                                    document.body.innerHTML = originalContents;
-                                }
+                                        document.body.innerHTML = originalContents;
+                                    }
     </script>
 

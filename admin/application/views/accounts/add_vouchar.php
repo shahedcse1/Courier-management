@@ -70,33 +70,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="amount" class="control-label col-md-2"></label>
-                                        <div class="col-md-5">
-                                            <button type="button" onclick="calculate_amount();" class="btn-large btn btn-success">Calculate Total Amount</button>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <input type="text"
-                                                   name="amount2"
-                                                   id="amount2"
-                                                   readonly
-                                                   value=""
-                                                   class="form-control" required="" />
-                                        </div>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="amount" class="control-label col-md-2">COD (%):</label>
 
                                         <div class="col-md-4">
                                             <input type="text"
                                                    name="amount3"
-                                                   id="amount3" onkeypress="calculate_cod();"
+                                                   id="amount3" onkeyup="calculate_cod();"
                                                    class="form-control" required="" />
                                         </div>
                                         <label for="amount" class="control-label col-md-2">Merchant Amount  :</label>
 
                                         <div class="col-md-4">
-                                            <input type="text"
+                                            <input type="text" style="background-color: blueviolet;color:#fff;"
                                                    name="amount4"
                                                    id="amount4" readonly=""
                                                    class="form-control" required="" />
@@ -149,18 +136,26 @@
 </div>
 <script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
 <script>
-                                                       function calculate_amount() {
-                                                           var payval = $("#amount").val();
-                                                           var adjust = $("#amount1").val();
-
-                                                           var total_amount = payval - adjust;
-                                                           $("#amount2").val(total_amount);
-                                                       }
+//                                                       function calculate_amount() {
+//                                                           var payval = $("#amount").val();
+//                                                           var adjust = $("#amount1").val();
+//
+//                                                           var total_amount = payval - adjust;
+//                                                           $("#amount2").val(total_amount);
+//                                                       }
 
                                                        function calculate_cod() {
-                                                           var totlval = $("#amount2").val();
+                                                           var payval = $("#amount").val();
+                                                           if (payval == '' || payval == '0.00') {
+                                                               $("#amount1").val('');
+                                                               $("#amount4").val('');
+                                                               alert('Please select payable tracking id first.');
+                                                           }
+                                                           var adjust = $("#amount1").val();
+                                                           var totlval = payval - adjust;
                                                            var cod = $("#amount3").val();
-                                                           var merchat_amount = Math.floor((totlval / cod) * 100);
+                                                           var pamount = (totlval * cod) / 100;
+                                                           var merchat_amount = Math.round(totlval - pamount);
                                                            $("#amount4").val(merchat_amount);
                                                        }
 </script>

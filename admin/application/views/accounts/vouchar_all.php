@@ -7,7 +7,7 @@
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box portletval">
                     <div class="portlet-title">
-                        <div class="caption">Voucher Details</div>
+                        <div class="caption">Account Voucher</div>
                     </div>
 
                     <div class="portlet-body">
@@ -22,14 +22,15 @@
                         ?>
                         <div class="btn-group">
                             <?php if ($this->session->userdata('user_role') == 1): ?>
-                                <a href="<?= base_url('accounts/vouchar'); ?>">
+                                <a href="<?= base_url('accounts/addvouchar'); ?>">
                                     <button type="button" class="btn btn-primary" data-toggle="modal">
-                                        <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-                                        Back to vouchar list
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        Create Voucher
                                     </button>
                                 </a>
                             <?php endif; ?>
                         </div>
+                        <br><br>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="portlet ">
@@ -38,42 +39,30 @@
                                                id="sample_1">
                                             <thead class="table-background">
                                                 <tr>
-                                                    <th class="text-center">Date</th>
+                                                    <th class="text-center">Paid To</th>
+                                                    <th class="text-center">Contact No.</th>
+                                                    <th class="text-center">Company Name</th>
                                                     <th class="text-center">Options</th>
-                                                    <th class="text-center">Voucher No.</th>
-
-                                                    <th class="text-center">payment Status</th>
-                                                    <th class="text-center">Amount</th>
-
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
                                                 if (sizeof($voucharinfo)):
+                                                    $id = 0;
                                                     foreach ($voucharinfo as $value):
+                                                        $id++;
                                                         ?>
                                                         <tr>
-                                                            <td><?= $value->paid_date; ?></td>
+                                                           <td><?= $value->name; ?></td>
+                                                            <td><?= $value->phone; ?></td>
+                                                            <td><?= $value->company_name; ?></td>
                                                             <td>
-                                                                <a href="<?= base_url('accounts/print_vouchar?id=' . $value->id); ?>">
-                                                                    <button class="cost_edit btn btn-primary btn-circle" title="print">
-                                                                        <i class="fa fa-pencil">Preview / Print</i>
+                                                                <a href="<?= base_url('accounts/vouchar_details?paid_to=' . $value->paid_to); ?>">
+                                                                    <button class="btn btn-primary " title="View all">
+                                                                        <i class="fa fa-balance-scale">See Details</i>
                                                                     </button>
                                                                 </a>
                                                             </td>
-                                                            <td><?= $value->vouchar_no; ?></td>
-
-                                                            <td style="background-color: green;color:#fff;">
-                                                                <?php
-                                                                if ($value->receivedby_marchent == 1):
-                                                                    echo 'Paid';
-                                                                else:
-                                                                    echo 'Unpaid';
-                                                                endif;
-                                                                ?>
-                                                            </td>
-                                                            <td><?= $value->total_amount; ?></td>
-
                                                         </tr>
                                                         <?php
                                                     endforeach;
@@ -91,5 +80,6 @@
         </div>
         <script src="<?= base_url('assets/js/custom/payable.js'); ?>" type="text/javascript"></script>
     </div>
+
 
 

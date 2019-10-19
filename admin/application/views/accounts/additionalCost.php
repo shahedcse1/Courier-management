@@ -38,29 +38,29 @@
                                         <table class="table table-striped table-bordered table-hover text-center"
                                                id="sample_1">
                                             <thead class="table-background">
-                                            <tr>
-                                                <th class="text-center">Action</th>
-                                                <th class="text-center">Date</th>
-                                                <th class="text-center">Purpose</th>
-                                                <th class="text-center">Amount</th>
-                                            </tr>
+                                                <tr>
+                                                    <th class="text-center">Action</th>
+                                                    <th class="text-center">Date</th>
+                                                    <th class="text-center">Purpose</th>
+                                                    <th class="text-center">Amount</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <?php foreach ($costs as $cost): ?>
-                                            <tr data-id="<?= $cost->id ?>">
-                                                <td>
-                                                    <button class="cost_edit btn btn-primary btn-circle  btn-xs" title="Edit">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </button>
-                                                    <button class="cost_delete btn-circle btn btn-danger btn-xs" title="Delete">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                                <td><?= $cost->date ? date("d F, Y", strtotime($cost->date)) : ''; ?></td>
-                                                <td><?= $cost->purpose ?></td>
-                                                <td>&#2547; <?= number_format($cost->amount, 2) ?></td>
-                                            </tr>
-                                            <?php endforeach; ?>
+                                                <?php foreach ($costs as $cost): ?>
+                                                    <tr data-id="<?= $cost->id ?>">
+                                                        <td>
+                                                            <button class="cost_edit btn btn-primary btn-circle  btn-xs" title="Edit">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </button>
+                                                            <button class="cost_delete btn-circle btn btn-danger btn-xs" title="Delete">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                        <td><?= $cost->date ? date("d F, Y", strtotime($cost->date)) : ''; ?></td>
+                                                        <td><?= $cost->purpose ?></td>
+                                                        <td>&#2547; <?= number_format($cost->amount, 2) ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -97,19 +97,32 @@
                                                         </div>
 
                                                         <div class="form-group col-md-12">
-                                                            <label for="addPurpose">Purpose</label>
-                                                            <textarea class="form-control"
-                                                                      name="addPurpose"
-                                                                      id="addPurpose"
-                                                                      rows="5"
-                                                                      required></textarea>
+                                                            <label for="dateOfCost" class="font-size-12">Select purpose:</label>
+                                                            <div class="input-group">
+                                                                <select class="form-control form-control-inline input-medium " name="addPurpose"id="addPurpose">
+                                                                    <option value="">-Select--</option>
+                                                                    <?php foreach ($category as $value): ?>
+                                                                        <option value="<?= $value->category_name; ?>"><?= $value->category_name; ?></option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </div>
                                                         </div>
+
+                                                        
                                                         <div class="form-group col-md-12">
                                                             <label for="addAmount">Amount</label>
                                                             <input type="text"
                                                                    class="form-control"
                                                                    id="addAmount"
                                                                    name="addAmount">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="addPurpose">Remarks</label>
+                                                            <textarea class="form-control"
+                                                                      name="remarks"
+                                                                      id="remarks"
+                                                                      rows="5"
+                                                                      ></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer ">
