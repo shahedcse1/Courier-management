@@ -16,7 +16,7 @@
 
     .tab {
         overflow: hidden;
-        border: 2px solid black;
+      
         //   background-color: yellow;
     }
 
@@ -34,12 +34,13 @@
 
     /* Change background color of buttons on hover */
     .tab button:hover {
-        background-color:greenyellow;
+        background-color:#f08797;
     }
 
     /* Create an active/current tablink class */
     .tab button.active {
-        background-color:#f39c12;
+        background-color:#1B2757;
+        color:#fff;
     }
 
     /* Style the tab content */
@@ -73,9 +74,9 @@
             <?php else: ?>
                 <div class="col-md-12">
                     <div class="tab">
-                        <button  style="background-color:green;color:#fff;"class="tablinks" id="active" onclick="openCity(event, 'single')">Single product request</button>
-                        <button class="tablinks"style="background-color:#F79646;" onclick="openCity(event, 'multiple')">Multiple product request</button>
-                        <button class="tablinks"style="background-color:#4BACC6;" onclick="openCity(event, 'csv')">Import CSV/XLS</button>
+                        <button  style="border:1px solid black;"class="tablinks" id="active" onclick="openCity(event, 'single')">Single product request</button>
+                        <button class="tablinks"style=" margin-left: 20px; border:1px solid black;" onclick="openCity(event, 'multiple')">Multiple product request</button>
+                        <button class="tablinks"style=" margin-left: 20px; border:1px solid black;" onclick="openCity(event, 'csv')">Import CSV/XLS</button>
                     </div>
 
 

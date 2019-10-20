@@ -122,7 +122,7 @@
                                                                         <button type="button" onclick="delay_reason();" id="delay" value="<?= $value->delay_notes ?>" class="btn-default-focus">Delay reason</button>
                                                                     <?php endif; ?>
                                                                     <?php if (!empty($value->cancel_notes)): ?>
-                                                                        <button type="button" onclick="cancel_reason();" id="cancel" value="<?= $value->cancel_notes ?>" class="btn-default-focus">cancel reason</button>
+                                                                        <button type="button" onclick="cancel_reason();" id="cancel_note" value="<?= $value->cancel_notes ?>" class="btn-default-focus">cancel reason</button>
                                                                     <?php endif; ?>
                                                                 </td>
 
@@ -153,7 +153,7 @@
 
                                                                         <button type="button" onclick="hold_reason(<?= $value->id; ?>);"  class="btn-info">Hold</button>
                                                                         &nbsp;
-                                                                        <button type="button" onclick="cancel_reason(<?= $value->id; ?>);"  class="btn-danger">Cancel</button> &nbsp;
+                                                                        <button type="button" onclick="cancel_reason_add(<?= $value->id; ?>);"  class="btn-danger">Cancel</button> &nbsp;
                                                                         <a  target="_blank"href="<?= base_url('merchant/print_challan?id=') . $value->id ?>">
                                                                             <button type="button" class="btn-success">Print Challan</button>
                                                                         </a>
@@ -286,7 +286,7 @@
         </div>
     </div>
 
-    <div class="modal fade fade modal-auto-clear" id="cancelmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade fade modal-auto-clear" id="cancelmodal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header table-background">
@@ -296,7 +296,7 @@
                     </button>
                     Please add cancel reason.
                 </div>
-                <div class="modal-body col-md-12"style="color:red;" >
+                <div class="modal-body col-md-12"style="color:green;" >
                     <input type="hidden" id="req_id2" name="req_id2" class="form-control">
                     <label class="control-label col-md-5"><b>Delivery Charge Collect From Delivery Man:</b></label>
                     <div class="control-label col-md-4">
@@ -316,10 +316,10 @@
     </div>
 
     <script>
-        function cancel_reason(id) {
+        function cancel_reason_add(id) {
             var requestid = id;
             $('#req_id2').val(requestid);
-            $('#cancelmodal').modal('show');
+            $('#cancelmodal2').modal('show');
 
         }
 
@@ -346,7 +346,7 @@
                         collect_frmod: charge
                     }
                 });
-                alert('Notes added Succesfully');
+                alert('action Completed Succesfully');
                 location.reload();
             }
         }
@@ -366,7 +366,7 @@
                         notes: notes
                     }
                 });
-                alert('Notes added Succesfully');
+                alert('Action Completed Succesfully');
                 location.reload();
             }
         }
@@ -387,7 +387,7 @@
 
         }
         function cancel_reason() {
-            var cancel = $('#cancel').val();
+            var cancel = $('#cancel_note').val();
             $('#alert2').html(cancel);
             $('#infomodal2').modal('show');
 

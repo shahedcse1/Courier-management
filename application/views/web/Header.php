@@ -62,6 +62,20 @@
         .sign-in:focus {
             color: #fff;
         }
+        .content {
+            padding: 16px;
+        }
+
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .sticky + .content {
+            padding-top: 102px;
+        }
     </style>
 </head>
 
@@ -94,7 +108,7 @@
     </div>
 </div> 
 
-<header class="header-main">
+<header class="header-main"id="myHeader">
     <div class="top-bar font2-title1 white-clr">
         <div class="theme-container container">
             <div class="row">
@@ -117,7 +131,7 @@
     <!-- /.Header Topbar -->
 
     <!-- Header Logo & Navigation -->
-    <nav class="menu-bar font2-title1">
+    <nav class="menu-bar font2-title1" >
         <div class="theme-container container">
             <div class="row">
                 <div class="col-md-2 col-sm-2">

@@ -77,7 +77,7 @@
                                         <div class="col-md-4">
                                             <input type="text"
                                                    name="amount3"
-                                                   id="amount3" onkeyup="calculate_cod();"
+                                                   id="amount3"onkeypress="return isNumberKey(event);" onkeyup="calculate_cod();"
                                                    class="form-control" required="" />
                                         </div>
                                         <label for="amount" class="control-label col-md-2">Merchant Amount  :</label>
@@ -136,13 +136,10 @@
 </div>
 <script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
 <script>
-//                                                       function calculate_amount() {
-//                                                           var payval = $("#amount").val();
-//                                                           var adjust = $("#amount1").val();
-//
-//                                                           var total_amount = payval - adjust;
-//                                                           $("#amount2").val(total_amount);
-//                                                       }
+                                                       function isNumberKey(evt) {
+                                                           var charCode = (evt.which) ? evt.which : evt.keyCode
+                                                           return !(charCode > 31 && (charCode < 48 || charCode > 57));
+                                                       }
 
                                                        function calculate_cod() {
                                                            var payval = $("#amount").val();

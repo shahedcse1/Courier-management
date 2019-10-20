@@ -53,13 +53,20 @@
                                                         $id++;
                                                         ?>
                                                         <tr>
-                                                           <td><?= $value->name; ?></td>
+                                                            <td>
+                                                                <a href="<?= base_url('accounts/vouchar_details?paid_to=' . $value->paid_to); ?>">
+                                                                    <?= $value->name; ?>
+                                                                </a>
+                                                            </td>
                                                             <td><?= $value->phone; ?></td>
-                                                            <td><?= $value->company_name; ?></td>
+                                                            <td>
+                                                                <a href="<?= base_url('accounts/vouchar_details?paid_to=' . $value->paid_to); ?>">
+                                                                <?= $value->company_name; ?></td>
+                                                            </a>
                                                             <td>
                                                                 <a href="<?= base_url('accounts/vouchar_details?paid_to=' . $value->paid_to); ?>">
                                                                     <button class="btn btn-primary " title="View all">
-                                                                        <i class="fa fa-balance-scale">See Details</i>
+                                                                        <i class="fa fa-balance-scale">Accounts Details </i>
                                                                     </button>
                                                                 </a>
                                                             </td>
