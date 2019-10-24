@@ -70,7 +70,7 @@
                                                         <td><?= $user->user_pin; ?></td>
                                                         <td><?= $user->phone; ?></td>
                                                         <td><?= $user->address; ?></td>
-                                                        <td><?= $user->role_name; ?></td>
+                                                        <td style="background-color:<?= $user->backgorund_color; ?> "  ><?= $user->role_name; ?></td>
                                                         <td><?= $user->status == '1' ? "Active" : "Inactive"; ?></td>
                                                         <td>
                                                             <a href="<?= base_url('uploads/') . $user->image_path; ?>"

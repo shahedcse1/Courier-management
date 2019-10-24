@@ -256,6 +256,12 @@ class Merchant extends CI_Controller {
 
         $deliverymanqr = $this->db->query("SELECT * FROM staffs WHERE category=3 order by name asc");
         $data['deliveryman'] = $deliverymanqr->result();
+        $month = $this->input->get('month');
+        if (empty($month)):
+            $date = date('Y-m');
+        else:
+            $date = $month;
+        endif;
 
         $userId = $this->input->get("id");
 
@@ -271,21 +277,17 @@ class Merchant extends CI_Controller {
                 ->join('zone', 'zone.id = request.zoneid')
                 ->join('users', 'users.id = request.request_by')
                 ->join('status', 'status.id = request.final_status')
-                ->where('request.request_by', $userId);
-
-
-
-
-
+                ->where('request.request_by', $userId)
+                ->LIKE('request.createddate', $date);
         $data['requestinfo'] = $this->db
                 ->order_by('status.ordr_by', 'asc')
                 ->get()
                 ->result();
 
-
+        $data['user_id'] = $userId;
         $this->load->view('common/header', $data);
         $this->load->view('common/sidebar', $data);
-        $this->load->view('merchant/request_list', $data);
+        $this->load->view('merchant/request_list_merchant', $data);
         $this->load->view('common/footer', $data);
     }
 
@@ -424,8 +426,10 @@ class Merchant extends CI_Controller {
     public function request_save_multiple() {
         if (in_array($this->session->userdata('user_role'), array(2))) :
             $created_by = $this->session->userdata("user_id");
-            $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
-            $deliverycost = $settings_query->pprice;
+
+//            $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
+//            $deliverycost = $settings_query->pprice;
+
             $maxidqr = $this->db->query("SELECT MAX(id) AS MAX FROM request ");
             $max = $maxidqr->row()->MAX;
 
@@ -436,6 +440,19 @@ class Merchant extends CI_Controller {
             endif;
             $zones = $this->input->post('zoneid');
             foreach ($zones as $i => $zone):
+                $pweight = $this->input->post('weight')[$i];
+                $settings_query = $this->db->query("SELECT price_plan,weight_plan,price_plan.price AS pprice,weight_plan.price AS wprice FROM users JOIN price_plan ON price_plan.id=users.price_plan JOIN weight_plan ON weight_plan.id=users.weight_plan where users.id='$created_by' ")->row();
+                if ($pweight == 1 || $pweight == 2):
+                    $deliverycost = $settings_query->pprice;
+                elseif ($pweight == 3):
+                    $deliverycost = $settings_query->pprice + $settings_query->wprice;
+                elseif ($pweight == 4):
+                    $deliverycost = $settings_query->pprice + ($settings_query->wprice * 2);
+                elseif ($pweight == 5):
+                    $deliverycost = $settings_query->pprice + ($settings_query->wprice * 3);
+                elseif ($pweight == 6):
+                    $deliverycost = $settings_query->pprice + ($settings_query->wprice * 4);
+                endif;
                 $trackid++;
                 $trackingId = 'pxBD' . $trackid;
                 $requestData = [
@@ -447,6 +464,8 @@ class Merchant extends CI_Controller {
                     'order_no' => $this->input->post('order_no')[$i],
                     'netprice' => $this->input->post('netprice')[$i] ? $this->input->post('netprice')[$i] : 0.00,
                     'product_price' => $this->input->post('netprice')[$i] ? $this->input->post('netprice')[$i] : 0.00,
+                    'p_weight' => $pweight,
+                    'delivery_type' => $this->input->post('delivery_type')[$i],
                     'delivery_cost' => $deliverycost,
                     'quantity' => 1,
                     'request_by' => $created_by,

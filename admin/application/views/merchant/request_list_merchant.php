@@ -10,16 +10,29 @@
                         <div class="caption">All Request</div>
                     </div>
                     <div class="portlet-body">
-
-                        <div class="btn-group">
-                            <?php if ($role == 2): ?>
-                                <a href="<?= base_url('merchant/makerequest'); ?>" class="linkstyle">
-                                    <button class="btn btn-info btn-sm">
-                                        <i class="glyphicon glyphicon-plus"></i> Add New Request
+                        <?php if ($this->session->userdata('user_role') == 1): ?>
+                            <div class="btn-group">
+                                <a href="<?= base_url('userinfo/allmerchant'); ?>">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal">
+                                        <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                                        Back to merchant list
                                     </button>
                                 </a>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px; margin-left: 50px;">
+                                <form id="monthOfProfitForm" class="form-inline" action="<?= base_url('Merchant/allrequest_list'); ?>" method="GET">
+                                    <div class="form-group col-md-12">
+                                        <label for="monthOfProfit" class="font-size-12">Select  Month:</label>
+                                        <div class="input-group">
+                                            <input value="<?= $user_id ?>" class="form-control" type="hidden" name="id" id="id">
+                                            <input autocomplete="off" class="form-control form-control-inline input-medium date-picker" size="16" type="text" name="month" id="monthOfProfit">
+                                        </div>
+                                        <button type="submit" style="margin-left: 10px" class="btn btn-primary form-control" id="submitMonthOfProfit">Submit</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        <?php endif; ?>
 
                         <br><br>
                         <?php
@@ -66,7 +79,7 @@
                                                         <th class="text-center">Zone</th>
                                                         <th class="text-center">Total<br> Amount</th>
                                                         <th class="text-center">D. Charge</th>
-                                                         <th class="text-center">Payable<br>Amount</th>
+                                                        <th class="text-center">Payable<br>Amount</th>
                                                         <th class="text-center">Status</th>
 
                                                         <?php if ($role == 1 && ($status == 6 || $status == 7)): ?>
@@ -111,7 +124,7 @@
                                                                 <td><?= $value->customer_name; ?><br>(<?= $value->customer_phone; ?>)</td>
                                                                 <td><?= $value->d_address; ?></td>
                                                                 <td><?= $value->zone_name; ?></td>
-                                                                <td><?= $value->netprice +$value->delivery_cost ?></td>
+                                                                <td><?= $value->netprice + $value->delivery_cost ?></td>
                                                                 <td><?= $value->delivery_cost; ?></td>
                                                                 <td><?= $value->netprice; ?></td>
                                                                 <td style="background-color:<?= $value->color; ?> ">
@@ -208,7 +221,7 @@
                                                         <input type="checkbox" name="delivery_Charge" value="1">&nbsp;&nbsp;  YES
                                                     </div>
                                                 </div><br>
-<!--                                                <button type="submit"name="action" value="7" class="btn-lg btn-danger pull-left"> All selected canceled by customer</button>&nbsp;&nbsp;-->
+                                                <!--                                                <button type="submit"name="action" value="7" class="btn-lg btn-danger pull-left"> All selected canceled by customer</button>&nbsp;&nbsp;-->
                                                 <button type="submit"name="action" value="5" class="btn-lg btn-primary pull-left"> All selected make to delivered</button>
                                             <?php endif; ?>
                                         </form>
@@ -406,4 +419,15 @@
             $(':checkbox').prop('checked', !d.checked); // set all checkboxes 'checked' property using '.prop()'
             d.checked = !d.checked; // set the new 'checked' opposite value to the button's data object
         });
+    </script>
+    <script src="<?= base_url('assets/global/plugins/moment.min.js') ?>"></script>
+    <script src="<?= base_url('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/custom/payable.js'); ?>" type="text/javascript"></script>
+    <script>
+          $('.date-picker').datepicker({
+              format: "yyyy-mm",
+              startView: "months",
+              minViewMode: "months",
+              endDate: new Date()
+          });
     </script>

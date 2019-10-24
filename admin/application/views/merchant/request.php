@@ -16,7 +16,7 @@
 
     .tab {
         overflow: hidden;
-      
+
         //   background-color: yellow;
     }
 
@@ -323,12 +323,38 @@
                                                                 <input type="text" required onkeypress="return isNumberKey(event)" maxlength="11" name="customer_phone[]" id="customer_phone"  class="form-control"/>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3"><b>Packet Weight:</b> <span style="color:red;">*</span></label>
+                                                            <div class="col-md-8">
+                                                                <select  name="weight[]" required id="weight"  class="form-control">
+                                                                    <option value="">Select</option>
+                                                                    <?php
+                                                                    if (isset($weight)):
+                                                                        foreach ($weight AS $value):
+                                                                            ?>
+                                                                            <option value="<?= $value->id; ?>"><?= $value->weight; ?></option>
+                                                                            <?php
+                                                                        endforeach;
+                                                                    endif;
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
 
 
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3"><b>Product Price:</b> <span style="color:red;">*</span></label>
                                                             <div class="col-md-8">
                                                                 <input type="text"  required  name="netprice[]" id="netprice"  class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3"><b>Delivery Type:</b></label>
+                                                            <div class="col-md-8">
+                                                                <select  name="delivery_type[]" id="delivery_type"  class="form-control">
+                                                                    <option value="1">Normal</option>
+                                                                    <option value="2">Urgent</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -386,11 +412,36 @@
                                                                 </div>
                                                             </div>
 
-
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3"><b>Packet Weight:</b> <span style="color:red;">*</span></label>
+                                                                <div class="col-md-8">
+                                                                    <select  name="weight[]" required id="weight"  class="form-control">
+                                                                        <option value="">Select</option>
+                                                                        <?php
+                                                                        if (isset($weight)):
+                                                                            foreach ($weight AS $value):
+                                                                                ?>
+                                                                                <option value="<?= $value->id; ?>"><?= $value->weight; ?></option>
+                                                                                <?php
+                                                                            endforeach;
+                                                                        endif;
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                             <div class="form-group">
                                                                 <label class="control-label col-md-3"><b>Product Price:</b> <span style="color:red;">*</span></label>
                                                                 <div class="col-md-8">
                                                                     <input type="text"  required  name="netprice[]" id="netprice"  class="form-control"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3"><b>Delivery Type:</b></label>
+                                                                <div class="col-md-8">
+                                                                    <select  name="delivery_type[]" id="delivery_type"  class="form-control">
+                                                                        <option value="1">Normal</option>
+                                                                        <option value="2">Urgent</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
 
@@ -436,7 +487,7 @@
                                 aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body col-md-12" style="  width: 100%; height:320px; background-image: url('<?= base_url('uploads/new.jpg'); ?>');" >
+                    <div class="modal-body col-md-12" style=" " >
 
                     </div>
                     <div class="modal-footer ">
@@ -450,45 +501,45 @@
         <script src="<?= base_url('assets/js/custom/staffinfo.js'); ?>" type="text/javascript"></script>
         <script>
 
-                                                                    (function($) {
-                                                                        "use strict";
-                                                                        var itemTemplate = $('.example-template').detach(),
-                                                                                editArea = $('.edit-area'),
-                                                                                itemNumber = 1;
+                                                                        (function($) {
+                                                                            "use strict";
+                                                                            var itemTemplate = $('.example-template').detach(),
+                                                                                    editArea = $('.edit-area'),
+                                                                                    itemNumber = 1;
 
-                                                                        $(document).on('click', '.edit-area .add', function(event) {
-                                                                            var item = itemTemplate.clone();
-                                                                            item.find('[name]').attr('name', function() {
-                                                                                return $(this).attr('name') + '_' + itemNumber;
+                                                                            $(document).on('click', '.edit-area .add', function(event) {
+                                                                                var item = itemTemplate.clone();
+                                                                                item.find('[name]').attr('name', function() {
+                                                                                    return $(this).attr('name') + '_' + itemNumber;
+                                                                                });
+                                                                                ++itemNumber;
+                                                                                item.appendTo(editArea);
                                                                             });
-                                                                            ++itemNumber;
-                                                                            item.appendTo(editArea);
-                                                                        });
 
-                                                                        $(document).on('click', '.edit-area .rem', function(event) {
-                                                                            editArea.children('.example-template').last().remove();
-                                                                        });
+                                                                            $(document).on('click', '.edit-area .rem', function(event) {
+                                                                                editArea.children('.example-template').last().remove();
+                                                                            });
 
-                                                                        $(document).on('click', '.edit-area .del', function(event) {
-                                                                            var target = $(event.target),
-                                                                                    row = target.closest('.example-template');
-                                                                            row.remove();
-                                                                        });
-                                                                    }(jQuery));
-                                                                    function openCity(evt, cityName) {
-                                                                        var i, tabcontent, tablinks;
-                                                                        tabcontent = document.getElementsByClassName("tabcontent");
-                                                                        for (i = 0; i < tabcontent.length; i++) {
-                                                                            tabcontent[i].style.display = "none";
+                                                                            $(document).on('click', '.edit-area .del', function(event) {
+                                                                                var target = $(event.target),
+                                                                                        row = target.closest('.example-template');
+                                                                                row.remove();
+                                                                            });
+                                                                        }(jQuery));
+                                                                        function openCity(evt, cityName) {
+                                                                            var i, tabcontent, tablinks;
+                                                                            tabcontent = document.getElementsByClassName("tabcontent");
+                                                                            for (i = 0; i < tabcontent.length; i++) {
+                                                                                tabcontent[i].style.display = "none";
+                                                                            }
+                                                                            tablinks = document.getElementsByClassName("tablinks");
+                                                                            for (i = 0; i < tablinks.length; i++) {
+                                                                                tablinks[i].className = tablinks[i].className.replace(" active", "");
+                                                                            }
+                                                                            document.getElementById(cityName).style.display = "block";
+                                                                            evt.currentTarget.className += " active";
                                                                         }
-                                                                        tablinks = document.getElementsByClassName("tablinks");
-                                                                        for (i = 0; i < tablinks.length; i++) {
-                                                                            tablinks[i].className = tablinks[i].className.replace(" active", "");
-                                                                        }
-                                                                        document.getElementById(cityName).style.display = "block";
-                                                                        evt.currentTarget.className += " active";
-                                                                    }
-                                                                    document.getElementById("active").click();
+                                                                        document.getElementById("active").click();
 
         </script>
 

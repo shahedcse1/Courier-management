@@ -66,12 +66,7 @@
                                 <span class="title">All Merchant</span>
                             </a>
                         </li>
-                        <li class="nav-item start <?= $sub_menu == 'message' ? 'active open' : ''; ?>">
-                            <a href="<?= base_url('messageinfo'); ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">All Message</span>
-                            </a>
-                        </li>
+
 
                     </ul>
                 </li>
@@ -115,6 +110,13 @@
                             <a href="<?= base_url('accounts/profitanalysis') ?>" class="nav-link nav-toggle">
                                 <i class=""></i>
                                 <span class="title">Profit Analysis</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item start <?= $sub_menu == 'transaction' ? 'active open' : ''; ?>">
+                            <a href="<?= base_url('accounts/transaction') ?>" class="nav-link nav-toggle">
+                                <i class=""></i>
+                                <span class="title">Transaction Details</span>
                             </a>
                         </li>
 

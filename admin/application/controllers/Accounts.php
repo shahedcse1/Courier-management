@@ -47,13 +47,47 @@ class Accounts extends CI_Controller {
         $data['active_menu'] = 'accounts';
         $data['sub_menu'] = 'vouchar';
         $user_id = $this->input->get('paid_to');
+        $month = $this->input->get('month');
+
+        if (empty($month)):
+            $date = date("Y-m", strtotime(date('Y-m-d')));
+        else:
+            $date = $month;
+        endif;
 
         $where = "WHERE paid_to=$user_id";
-        $data['voucharinfo'] = $this->db->query("SELECT vouchar.*,users.name,users.company_name FROM vouchar JOIN users ON users.id=vouchar.paid_to $where Order by id DESC")->result();
+        $data['voucharinfo'] = $this->db->query("SELECT vouchar.*,users.name,users.company_name FROM vouchar JOIN users ON users.id=vouchar.paid_to $where  AND paid_date LIKE '%$month%' Order by id DESC")->result();
 
+        $data['paidto'] = $user_id;
         $this->load->view('common/header', $data);
         $this->load->view('common/sidebar', $data);
         $this->load->view('accounts/vouchar', $data);
+        $this->load->view('common/footer', $data);
+    }
+
+    function transaction() {
+        $data['title'] = 'Transaction Details';
+        $data['active_menu'] = 'accounts';
+        $data['sub_menu'] = 'transaction';
+        $month = $this->input->post('month');
+        if (!empty($month)):
+            $all = $this->db
+                            ->select('SUM(netprice) as transaction')
+                            ->from('accounts')
+                            ->where('paidtomarchent', 1)
+                            ->LIKE('paid_marchent_date', $month)
+                            ->get()
+                            ->row()
+                    ->transaction;
+        else:
+            $all = 0;
+        endif;
+
+        $data['transaction'] = $all;
+
+        $this->load->view('common/header', $data);
+        $this->load->view('common/sidebar', $data);
+        $this->load->view('accounts/transaction_details', $data);
         $this->load->view('common/footer', $data);
     }
 

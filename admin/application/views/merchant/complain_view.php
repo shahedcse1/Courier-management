@@ -59,7 +59,7 @@
                                                     <div class="col-md-12">
                                                         <div class="pull-right">
                                                             <a href="<?= base_url('merchant/complainlist'); ?>">
-                                                                <button type="reset" class="btn btn-danger">Back</button>
+                                                                <button type="button" class="btn btn-danger">Back</button>
                                                             </a>
                                                         </div>
                                                     </div>

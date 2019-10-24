@@ -124,7 +124,7 @@ $('#zoneid').change(function() {
 });
 
 $(document).ready(function() {
-    $('#infomodal').modal('show');
+  //  $('#infomodal').modal('show');
 });
 
 function calculate_net() {

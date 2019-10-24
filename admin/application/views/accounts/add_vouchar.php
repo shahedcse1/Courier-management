@@ -74,13 +74,22 @@
                                     <div class="form-group">
                                         <label for="amount" class="control-label col-md-2">COD (%):</label>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             <input type="text"
                                                    name="amount3"
-                                                   id="amount3"onkeypress="return isNumberKey(event);" onkeyup="calculate_cod();"
-                                                   class="form-control" required="" />
+                                                   id="amount3"onkeypress="return isNumberKey(event);"
+                                                   class="form-control"  />
                                         </div>
-                                        <label for="amount" class="control-label col-md-2">Merchant Amount  :</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="amount" class="control-label col-md-2"></label>
+
+                                        <div class="col-md-4">
+                                            <button type="button"  onclick="calculate_cod();" class="btn btn-success btn-large">Calculate Total Amount</button>
+                                        </div>
+
+
+                                        <label for="amount" class="control-label col-md-2"><b>Merchant Amount:</b></label>
 
                                         <div class="col-md-4">
                                             <input type="text" style="background-color: blueviolet;color:#fff;"
@@ -136,25 +145,25 @@
 </div>
 <script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
 <script>
-                                                       function isNumberKey(evt) {
-                                                           var charCode = (evt.which) ? evt.which : evt.keyCode
-                                                           return !(charCode > 31 && (charCode < 48 || charCode > 57));
-                                                       }
+                                                function isNumberKey(evt) {
+                                                    var charCode = (evt.which) ? evt.which : evt.keyCode
+                                                    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+                                                }
 
-                                                       function calculate_cod() {
-                                                           var payval = $("#amount").val();
-                                                           if (payval == '' || payval == '0.00') {
-                                                               $("#amount1").val('');
-                                                               $("#amount4").val('');
-                                                               alert('Please select payable tracking id first.');
-                                                           }
-                                                           var adjust = $("#amount1").val();
-                                                           var totlval = payval - adjust;
-                                                           var cod = $("#amount3").val();
-                                                           var pamount = (totlval * cod) / 100;
-                                                           var merchat_amount = Math.round(totlval - pamount);
-                                                           $("#amount4").val(merchat_amount);
-                                                       }
+                                                function calculate_cod() {
+                                                    var payval = $("#amount").val();
+                                                    if (payval == '' || payval == '0.00') {
+                                                        $("#amount1").val('');
+                                                        $("#amount4").val('');
+                                                        alert('Please select payable tracking id first.');
+                                                    }
+                                                    var adjust = $("#amount1").val();
+                                                    var totlval = payval - adjust;
+                                                    var cod = $("#amount3").val();
+                                                    var pamount = (totlval * cod) / 100;
+                                                    var merchat_amount = Math.round(totlval - pamount);
+                                                    $("#amount4").val(merchat_amount);
+                                                }
 </script>
 
 

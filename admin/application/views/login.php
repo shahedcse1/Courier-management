@@ -37,13 +37,13 @@
         <link rel="shortcut icon" href="favicon.ico" />
         <style>
             .logbody{
-                background-color: grey;
+                background-color: #1B2757;
                 padding: 40px;
-                box-shadow: 0px 0px 30px #F5AB35;
+               
             }
             .title{
-                font-weight: 600;
-                color: #1a60ad;
+                font-weight: 700;
+                color: #fff;
             }
             .loginpage{
                 margin-top:170px;
@@ -59,7 +59,7 @@
                 <form class="login-form" action="<?= base_url('auth/login'); ?>" method="post" >
                     <div class="col-md-8 col-md-offset-1 logbody" style="border: 1px solid black;">
                         <div class="form-title text-center">
-                            <h3 class="title">Login</h3>
+                            <h3 class="title">Parcel xpress BD Login</h3>
                             <img src="<?= base_url('assets/pages/img/logo-black.png'); ?>" width="100" height="60">
                         </div>
                         <?php if ($this->session->userdata('login_error')): ?>
