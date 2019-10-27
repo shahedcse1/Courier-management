@@ -6,15 +6,16 @@
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box portletval">
                     <div class="portlet-title">
-                        <div class="caption">Additional Cost</div>
+                        <div class="caption">Additional Cost Details</div>
                     </div>
                     <div class="portlet-body">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-toggle="modal"
-                                    data-target="#addModal">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                Add Additional Cost
-                            </button>
+                            <a href="<?= base_url('accounts/additionalcost'); ?>">
+                                <button type="button" class="btn btn-primary"
+                                        <span class=" glyphicon-backward" aria-hidden="true"></span>
+                                    <- Back to Additional Cost
+                                </button>
+                            </a>
                         </div>
                         <br><br>
                         <?php
@@ -39,28 +40,26 @@
                                                id="sample_1">
                                             <thead class="table-background">
                                                 <tr>
-                                                    <th class="text-center">Month</th>
-                                                    <th class="text-center">Number Of Cost</th>
-                                                    <th class="text-center">Total Cost</th>
-                                                    <th class="text-center">Option</th>
-
+                                                    <th class="text-center">Action</th>
+                                                    <th class="text-center">Date</th>
+                                                    <th class="text-center">Purpose</th>
+                                                    <th class="text-center">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($costs as $cost): ?>
-                                                    <tr>
+                                                    <tr data-id="<?= $cost->id ?>">
                                                         <td>
-                                                            <?= $cost->yr_mon ? date("F, Y", strtotime($cost->yr_mon)) : ''; ?>
+                                                            <button class="cost_edit btn btn-primary btn-circle  btn-xs" title="Edit">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </button>
+                                                            <button class="cost_delete btn-circle btn btn-danger btn-xs" title="Delete">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
                                                         </td>
-                                                        <td><?= $cost->num_cost ?></td>
-                                                        <td>&#2547; <?= number_format($cost->total, 2) ?></td>
-                                                        <td>
-                                                            <a href="<?= base_url('Accounts/cost_details?month=' . $cost->yr_mon); ?>">
-                                                                <button type="button" class="btn-success">
-                                                                    See Details
-                                                                </button>
-                                                            </a>
-                                                        </td>
+                                                        <td><?= $cost->date ? date("d F, Y", strtotime($cost->date)) : ''; ?></td>
+                                                        <td><?= $cost->purpose ?></td>
+                                                        <td>&#2547; <?= number_format($cost->amount, 2) ?></td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>

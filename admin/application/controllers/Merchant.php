@@ -125,6 +125,48 @@ class Merchant extends CI_Controller {
         endif;
     }
 
+    function update_amount() {
+        if (in_array($this->session->userdata('user_role'), array(1))) :
+            $id = $this->input->get('id');
+            $amount = $this->input->get('amount');
+            $reason = $this->input->get('reason');
+            $netprice = $this->db->query("SELECT netprice FROM accounts WHERE request_id='$id'")->row()->netprice;
+            $updateamount = $netprice - $amount;
+            if ($amount < $netprice):
+                $amountdata = [
+                    'netprice' => $updateamount,
+                    'adjust_amount' => $amount,
+                    'adjust_reason' => $reason
+                ];
+                $this->db->where('request_id', $id);
+                $this->db->Update('accounts', $amountdata);
+
+                $amountdata1 = [
+                    'netprice' => $updateamount
+                ];
+                $this->db->where('id', $id);
+                $this->db->Update('request', $amountdata1);
+            elseif ($amount == $netprice):
+                $amountdata = [
+                    'netprice' => $updateamount,
+                    'adjust_amount' => $amount,
+                    'adjust_reason' => $reason,
+                    'paidtomarchent' => 1
+                ];
+                $this->db->where('request_id', $id);
+                $this->db->Update('accounts', $amountdata);
+
+                $amountdata1 = [
+                    'netprice' => $updateamount
+                ];
+                $this->db->where('id', $id);
+                $this->db->Update('request', $amountdata1);
+            endif;
+        else :
+            redirect('auth');
+        endif;
+    }
+
     function update_cancel() {
         $id = $this->input->get('id');
         $notes = $this->input->get('notes');

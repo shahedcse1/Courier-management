@@ -66,7 +66,7 @@
                                                         <th class="text-center">Zone</th>
                                                         <th class="text-center">Total<br> Amount</th>
                                                         <th class="text-center">D. Charge</th>
-                                                         <th class="text-center">Payable<br>Amount</th>
+                                                        <th class="text-center">Payable<br>Amount</th>
                                                         <th class="text-center">Status</th>
 
                                                         <?php if ($role == 1 && ($status == 6 || $status == 7)): ?>
@@ -111,7 +111,7 @@
                                                                 <td><?= $value->customer_name; ?><br>(<?= $value->customer_phone; ?>)</td>
                                                                 <td><?= $value->d_address; ?></td>
                                                                 <td><?= $value->zone_name; ?></td>
-                                                                <td><?= $value->netprice +$value->delivery_cost ?></td>
+                                                                <td><?= $value->netprice + $value->delivery_cost ?></td>
                                                                 <td><?= $value->delivery_cost; ?></td>
                                                                 <td><?= $value->netprice; ?></td>
                                                                 <td style="background-color:<?= $value->color; ?> ">
@@ -152,13 +152,15 @@
 
                                                                         </a>
                                                                     <?php elseif ($value->final_status == 6 && $role == 1): ?>
-
-                                                                        <button type="button" onclick="hold_reason(<?= $value->id; ?>);"  class="btn-info">Hold</button>
-                                                                        &nbsp;
-                                                                        <button type="button" onclick="cancel_reason_add(<?= $value->id; ?>);"  class="btn-danger">Cancel</button> &nbsp;
-                                                                        <a  target="_blank"href="<?= base_url('merchant/print_challan?id=') . $value->id ?>">
-                                                                            <button type="button" class="btn-success">Print Challan</button>
-                                                                        </a>
+                                                                        <select type="text">
+                                                                            <option value="#">-Select-</option>
+                                                                            <option value="#" onclick="hold_reason(<?= $value->id; ?>);"> Hold</option>
+                                                                            <option  style="color:red;"value="#" onclick="cancel_reason_add(<?= $value->id; ?>);">Cancel by Customer</option>
+                                                                            <option  style="color:green;"value="#" onclick="adjust_balance(<?= $value->id; ?>);">Adjust Balance</option>
+                                                                            <option value="#" onclick="javascript:window.location.href = '<?= base_url('merchant/print_challan?id=') . $value->id ?>'">
+                                                                                Print Challan
+                                                                            </option>
+                                                                        </select>
                                                                     <?php else: ?>
                                                                         N/A
                                                                     <?php endif; ?>
@@ -208,7 +210,7 @@
                                                         <input type="checkbox" name="delivery_Charge" value="1">&nbsp;&nbsp;  YES
                                                     </div>
                                                 </div><br>
-<!--                                                <button type="submit"name="action" value="7" class="btn-lg btn-danger pull-left"> All selected canceled by customer</button>&nbsp;&nbsp;-->
+                                                <!--                                                <button type="submit"name="action" value="7" class="btn-lg btn-danger pull-left"> All selected canceled by customer</button>&nbsp;&nbsp;-->
                                                 <button type="submit"name="action" value="5" class="btn-lg btn-primary pull-left"> All selected make to delivered</button>
                                             <?php endif; ?>
                                         </form>
@@ -316,8 +318,75 @@
             </div>
         </div>
     </div>
+    <div class="modal fade fade modal-auto-clear" id="adjustmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header table-background">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Please add adjust details.
+                </div>
+                <div class="modal-body col-md-12"style="color:black;">
+                    <h2>(N.B: You can not adjust more than  payable amount.)</h2>
+                    <input type="hidden" id="req_id3" name="req_id3" class="form-control">
+                    <label class="control-label col-md-5"><b>Adjust Amount :</b></label>
+                    <div class="control-label col-md-6">
+                        <input type="text" class="form-control" onkeypress="return isNumberKey(event);" required="" name="adjust_amount" id="adjust_amount" >
+                    </div><br><br>
+                    <label class="control-label col-md-5"><b>Adjustment Reason :</b></label>
+                    <div class="control-label col-md-6">
+                        <textarea type="text" name="adjust_reason" required=""  id="adjust_reason"  class="form-control">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button" onclick="update_amount();" class="btn btn-success" data-dismiss="modal">Submit
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            return !(charCode > 31 && (charCode < 48 || charCode > 57));
+        }
+
+        function adjust_balance(id) {
+            var requestid = id;
+            $('#req_id3').val(requestid);
+            $('#adjustmodal').modal('show');
+        }
+
+        function update_amount() {
+            var id = $("#req_id3").val();
+            var amount = $("#adjust_amount").val();
+            var reason = $("#adjust_reason").val();
+            if (amount == '' || reason == '') {
+                alert('Please fillup both fields');
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: "<?= base_url('merchant/update_amount'); ?>",
+                    data: {
+                        id: id,
+                        amount: amount,
+                        reason: reason
+
+                    }
+                });
+                alert('Action Completed Succesfully');
+                location.reload();
+            }
+        }
+
+
         function cancel_reason_add(id) {
             var requestid = id;
             $('#req_id2').val(requestid);
@@ -372,6 +441,7 @@
                 location.reload();
             }
         }
+
 
 
         $('document').ready(function()

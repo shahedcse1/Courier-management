@@ -241,6 +241,7 @@ class Accounts extends CI_Controller {
                 ->from('accounts')
                 ->join('request', 'accounts.request_id = request.id')
                 ->where('accounts.paidtomarchent', 0)
+                ->where('accounts.collect_frmod', 1)
                 ->where('request.request_by', $userId)
                 ->where('request.deliverydate <>', '')
                 ->order_by('request.tracking_id', 'asc')
@@ -400,11 +401,8 @@ class Accounts extends CI_Controller {
         $data['sub_menu'] = 'additionalcost';
         $data['costs'] = [];
         $data['category'] = $this->db->query("SELECT * FROM cost_category order by category_name")->result();
-        $data['costs'] = $this->db
-                ->order_by('date', 'desc')
-                ->get('additional_cost')
-                ->result();
 
+        $data['costs'] = $this->db->query("select substr(date, 1, 7) yr_mon, count(*) num_cost ,SUM(amount) AS total from additional_cost group by yr_mon order by yr_mon DESC ")->result();
         /** Assets */
         add_asset("css", 'css/style.css');
         add_assets('js', [
@@ -416,6 +414,33 @@ class Accounts extends CI_Controller {
         $this->load->view('common/header', $data);
         $this->load->view('common/sidebar', $data);
         $this->load->view('accounts/additionalCost', $data);
+        $this->load->view('common/footer', $data);
+    }
+
+    public function cost_details() {
+        if (!in_array($this->session->userdata('user_role'), [1])) {
+            redirect('auth');
+        }
+
+        $data['title'] = 'Costs Details';
+        $data['active_menu'] = 'accounts';
+        $data['sub_menu'] = 'additionalcost';
+        $data['costs'] = [];
+        $month = $this->input->get('month');
+        $data['category'] = $this->db->query("SELECT * FROM cost_category order by category_name")->result();
+
+        $data['costs'] = $this->db->query("select * FROM additional_cost where date LIKE '%$month%' order by date desc ")->result();
+        /** Assets */
+        add_asset("css", 'css/style.css');
+        add_assets('js', [
+            'global/plugins/moment.min.js',
+            'global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+            'js/custom/additionalCost.js'
+        ]);
+
+        $this->load->view('common/header', $data);
+        $this->load->view('common/sidebar', $data);
+        $this->load->view('accounts/additionalCost_details', $data);
         $this->load->view('common/footer', $data);
     }
 
@@ -437,9 +462,13 @@ class Accounts extends CI_Controller {
             'remarks' => $this->input->post('remarks')
         ];
 
-        $this->db
+        $status = $this->db
                 ->insert('additional_cost', $data);
-
+        if ($status):
+            $this->session->set_userdata('add', 'Add Additonal Cost Successfully ');
+        else:
+            $this->session->set_userdata('notadd', 'Failed to add Additonal Cost');
+        endif;
         redirect('accounts/additionalcost');
     }
 
