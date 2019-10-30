@@ -24,7 +24,7 @@
                     <span class="selected"></span>
                 </a>
             </li>
-            <?php if (in_array($this->session->userdata('user_role'), array(1, 3))) : ?>
+            <?php if (in_array($this->session->userdata('user_role'), array(1, 3, 4))) : ?>
                 <li class="nav-item start <?= $active_menu == 'requestlist' ? 'active open' : ''; ?>">
                     <a href="<?= base_url('merchant/requestlist'); ?>" class="nav-link">
                         <i class="icon-bag"></i>
@@ -72,7 +72,7 @@
                 </li>
             <?php endif; ?>
 
-            <?php if (in_array($this->session->userdata('user_role'), [1])) : ?>
+            <?php if (in_array($this->session->userdata('user_role'), [1, 5])) : ?>
                 <li class="nav-item start <?= $active_menu == 'accounts' ? 'active open' : ''; ?>">
                     <a href="javascript:;" class="nav-link nav-toggle">
                         <i class="icon-calculator"></i>
@@ -106,51 +106,53 @@
                                 <span class="title">Additional Costs</span>
                             </a>
                         </li>
-                        <li class="nav-item start <?= $sub_menu == 'profit' ? 'active open' : ''; ?>">
-                            <a href="<?= base_url('accounts/profitanalysis') ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">Profit Analysis</span>
-                            </a>
-                        </li>
+                        <?php if (in_array($this->session->userdata('user_role'), [1])) : ?>
+                            <li class="nav-item start <?= $sub_menu == 'profit' ? 'active open' : ''; ?>">
+                                <a href="<?= base_url('accounts/profitanalysis') ?>" class="nav-link nav-toggle">
+                                    <i class=""></i>
+                                    <span class="title">Profit Analysis</span>
+                                </a>
+                            </li>
 
-                        <li class="nav-item start <?= $sub_menu == 'transaction' ? 'active open' : ''; ?>">
-                            <a href="<?= base_url('accounts/transaction') ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">Transaction Details</span>
-                            </a>
-                        </li>
-
+                            <li class="nav-item start <?= $sub_menu == 'transaction' ? 'active open' : ''; ?>">
+                                <a href="<?= base_url('accounts/transaction') ?>" class="nav-link nav-toggle">
+                                    <i class=""></i>
+                                    <span class="title">Transaction Details</span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                 </li>
+                <?php if (in_array($this->session->userdata('user_role'), [1])) : ?>
+                    <li class="nav-item start <?= $active_menu == 'settings' ? 'active open' : ''; ?>">
+                        <a href="javascript:;" class="nav-link nav-toggle">
+                            <i class="icon-settings"></i>
+                            <span class="title">Settings</span>
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li class="nav-item start <?= $sub_menu == 'zone' ? 'active open' : ''; ?>">
+                                <a href="<?= base_url('settings/zone') ?>" class="nav-link nav-toggle">
+                                    <i class=""></i>
+                                    <span class="title">Zone</span>
+                                </a>
+                            </li>
 
-                <li class="nav-item start <?= $active_menu == 'settings' ? 'active open' : ''; ?>">
-                    <a href="javascript:;" class="nav-link nav-toggle">
-                        <i class="icon-settings"></i>
-                        <span class="title">Settings</span>
-                        <span class="arrow"></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li class="nav-item start <?= $sub_menu == 'zone' ? 'active open' : ''; ?>">
-                            <a href="<?= base_url('settings/zone') ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">Zone</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item start <?= $sub_menu == 'area' ? 'active open' : ''; ?>">
-                            <a href="<?= base_url('settings/area') ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">Area</span>
-                            </a>
-                        </li>
-                        <li class="nav-item start">
-                            <a href="<?= base_url('backup'); ?>" class="nav-link nav-toggle">
-                                <i class=""></i>
-                                <span class="title">Data backup</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                            <li class="nav-item start <?= $sub_menu == 'area' ? 'active open' : ''; ?>">
+                                <a href="<?= base_url('settings/area') ?>" class="nav-link nav-toggle">
+                                    <i class=""></i>
+                                    <span class="title">Area</span>
+                                </a>
+                            </li>
+                            <li class="nav-item start">
+                                <a href="<?= base_url('backup'); ?>" class="nav-link nav-toggle">
+                                    <i class=""></i>
+                                    <span class="title">Data backup</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
             <?php endif; ?>
             <?php if (in_array($this->session->userdata('user_role'), [2])) : ?>
 
@@ -205,7 +207,7 @@
                     <span class="selected"></span>
                 </a>
             </li>
-            <?php if (in_array($this->session->userdata('user_role'), [1, 3])) : ?>
+            <?php if (in_array($this->session->userdata('user_role'), [1, 2, 3, 4])) : ?>
                 <li class="nav-item start <?= $active_menu == 'complainlist' ? 'active open' : ''; ?>">
                     <a href="<?= base_url('merchant/complainlist'); ?>" class="nav-link">
                         <i class="icon-anchor"></i>

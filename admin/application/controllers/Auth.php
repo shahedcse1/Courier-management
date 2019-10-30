@@ -26,7 +26,7 @@ class Auth extends CI_Controller {
         $userpin = $this->input->post('userpin');
 
         if ($this->form_validation->run() == FALSE):
-            $this->session->set_userdata('login_error', 'Please Enter User Pin & Password correctly');
+            $this->session->set_userdata('login_error', 'Please Enter User Name & Password correctly');
 
             redirect('login');
         else:
@@ -54,12 +54,12 @@ class Auth extends CI_Controller {
 
                     redirect('auth');
                 else:
-                    $this->session->set_userdata('login_error', 'Please Check User Pin & Password.');
+                    $this->session->set_userdata('login_error', 'Please Check User Name & Password.');
 
                     redirect('login');
                 endif;
             else:
-                $this->session->set_userdata('login_error', 'Not a Valid User Pin.');
+                $this->session->set_userdata('login_error', 'Not a Valid User Name.');
                 redirect('login');
             endif;
         endif;
@@ -91,12 +91,12 @@ class Auth extends CI_Controller {
 
                 redirect('auth');
             else:
-                $this->session->set_userdata('login_error', 'Please Check User Pin & Password.');
+                $this->session->set_userdata('login_error', 'Please Check User Name & Password.');
 
                 redirect('login');
             endif;
         else:
-            $this->session->set_userdata('login_error', 'Not a Valid User Pin.');
+            $this->session->set_userdata('login_error', 'Not a Valid User Name.');
             redirect('login');
         endif;
     }

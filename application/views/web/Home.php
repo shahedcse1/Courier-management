@@ -21,7 +21,7 @@
                                         <div class="col-sm-3"><label for="name"><b> Name: </b></label></div>
                                         <div class="col-sm-9">
                                             <input type="text"
-                                                   style="color: black; height: 35px;"
+                                                   style="color:green; height: 35px;"
                                                    name="name"
                                                    id="name"
                                                    required
@@ -33,7 +33,7 @@
                                         <div class="col-sm-3"><label for="user_phone"><b> Phone:</b> </label></div>
                                         <div class="col-sm-9">
                                             <input type="text"
-                                                   style="color: black;  height: 35px;"
+                                                   style="color:green ;  height: 35px;"
                                                    maxlength="11"
                                                    onkeypress="return isNumberKey(event)"
                                                    name="user_phone"
@@ -46,7 +46,7 @@
                                     <div class="form-group wow fadeInUp" data-wow-offset="50" data-wow-delay=".30s">
                                         <div class="col-sm-3"><label for="user_email"><b>Email: </b></label></div>
                                         <div class="col-sm-9">
-                                            <input type="text" style="color: black; height: 35px;" name="user_email" id="user_email" required class="form-control" />
+                                            <input type="text" style="color: green; height: 35px;" name="user_email" id="user_email" required class="form-control" />
                                         </div>
                                     </div>
 

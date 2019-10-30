@@ -78,12 +78,12 @@
                                                             </td>
                                                             <td><?= $value->vouchar_no; ?></td>
 
-                                                            <td style="background-color: green;color: #ee5619">
+                                                            <td style="background-color: green;color: black">
                                                                 <?php
                                                                 if ($value->receivedby_marchent == 1):
-                                                                    echo 'Paid';
+                                                                    echo '<b style="font-size:20px">' . 'Paid' . '</b>';
                                                                 else:
-                                                                    echo 'Unpaid';
+                                                                    echo '<b style="font-size:20px">' . 'Unpaid' . '</b>';
                                                                 endif;
                                                                 ?>
                                                             </td>

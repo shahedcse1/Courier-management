@@ -66,7 +66,7 @@
         var options = {
             facebook: "232125570864856", // Facebook page ID
             call_to_action: "Message us", // Call to action
-            position: "right" // Position may be 'right' or 'left'
+            position: "left" // Position may be 'right' or 'left'
         };
         var proto = document.location.protocol, host = "whatshelp.io", url = proto + "//static." + host;
         var s = document.createElement('script');

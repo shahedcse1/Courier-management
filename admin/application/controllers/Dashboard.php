@@ -16,7 +16,7 @@ class Dashboard extends CI_Controller {
      * Dashboard works
      */
     public function index() {
-        if (!in_array($this->session->userdata('user_role'), [1, 2, 3])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 2, 3,4,5])) {
             redirect('auth');
         }
 

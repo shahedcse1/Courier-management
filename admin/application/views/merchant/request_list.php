@@ -1,4 +1,44 @@
 <link href="<?= base_url('assets/css/style.css'); ?>" rel="stylesheet" type="text/css" />
+<style>
+    .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 12px;
+        font-size: 13px;
+        border: none;
+    }
+
+    .dropup {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropup-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        bottom: 15px;
+        z-index: 1;
+    }
+
+    .dropup-content a {
+        color: black;
+        padding: 4px 8px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropup-content a:hover {background-color: #ccc}
+
+    .dropup:hover .dropup-content {
+        display: block;
+    }
+
+    .dropup:hover .dropbtn {
+        background-color: #2980B9;
+    }
+</style>
 <div class="page-content-wrapper">
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content">
@@ -7,7 +47,27 @@
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box portletval">
                     <div class="portlet-title">
-                        <div class="caption">All Request</div>
+                        <div class="caption">All Request  
+                            <?php if ($status == 1 && $role == 1): ?>
+                                <a href="<?= base_url('Merchant/requestlist/2'); ?>">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="glyphicon glyphicon-backward"></i> Go to Inprogress list
+                                    </button>
+                                </a>
+                            <?php elseif ($status == 2 && $role == 1): ?>
+                                <a href="<?= base_url('Merchant/requestlist/4'); ?>">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="glyphicon glyphicon-backward"></i> Go to Inhouse list
+                                    </button>
+                                </a>
+                            <?php elseif ($status == 4 && $role == 1): ?>
+                                <a href="<?= base_url('Merchant/requestlist/6'); ?>">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="glyphicon glyphicon-backward"></i> Go to Out For Delivery  list
+                                    </button>
+                                </a>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     <div class="portlet-body">
 
@@ -113,7 +173,16 @@
                                                                 <td><?= $value->zone_name; ?></td>
                                                                 <td><?= $value->netprice + $value->delivery_cost ?></td>
                                                                 <td><?= $value->delivery_cost; ?></td>
-                                                                <td><?= $value->netprice; ?></td>
+                                                                <td>
+                                                                    <?php
+                                                                    $adjustquery = $this->db->query("SELECT adjust_amount,adjust_reason FROM accounts where request_id='$value->id'")->row();
+                                                                    echo $value->netprice . '<br>';
+                                                                    if (!empty($adjustquery)):
+                                                                        echo $adjustquery->adjust_reason;
+                                                                    endif;
+                                                                    ?>
+
+                                                                </td>
                                                                 <td style="background-color:<?= $value->color; ?> ">
                                                                     <a href="<?= base_url('merchant/editrequest/' . $value->id . '/' . $status) ?>">
                                                                         <?= $value->status_name; ?><br>
@@ -149,18 +218,18 @@
                                                                     <?php if ($value->final_status == 1): ?>
                                                                         <a href="<?= base_url('merchant/editrequest/' . $value->id . '/' . $status) ?>">
                                                                             Update
-
                                                                         </a>
-                                                                    <?php elseif ($value->final_status == 6 && $role == 1): ?>
-                                                                        <select type="text">
-                                                                            <option value="#">-Select-</option>
-                                                                            <option value="#" onclick="hold_reason(<?= $value->id; ?>);"> Hold</option>
-                                                                            <option  style="color:red;"value="#" onclick="cancel_reason_add(<?= $value->id; ?>);">Cancel by Customer</option>
-                                                                            <option  style="color:green;"value="#" onclick="adjust_balance(<?= $value->id; ?>);">Adjust Balance</option>
-                                                                            <option value="#" onclick="javascript:window.location.href = '<?= base_url('merchant/print_challan?id=') . $value->id ?>'">
-                                                                                Print Challan
-                                                                            </option>
-                                                                        </select>
+                                                                    <?php elseif ($value->final_status == 6 && $role == 1 || $role == 5): ?>
+                                                                        <div class="dropup">
+                                                                            <button class=" btn-primary " type="button">Action</button>
+                                                                            <div class="dropup-content">
+                                                                                <a onclick="hold_reason(<?= $value->id; ?>);"href="#">Hold</a>
+                                                                                <a href="#" style="color:red"onclick="cancel_reason_add(<?= $value->id; ?>);">Cancel by Customer</a>
+                                                                                <a href="#" style="color:green" onclick="adjust_balance(<?= $value->id; ?>);">Adjust Balance </a>
+                                                                                <a href="#" onclick="javascript:window.location.href = '<?= base_url('merchant/print_challan?id=') . $value->id ?>'">Print Chalan</a>
+                                                                                <a href="#"style="color:red" onclick="action_delete(<?= $value->id; ?>);">Order Cancel</a>
+                                                                            </div>
+                                                                        </div>
                                                                     <?php else: ?>
                                                                         N/A
                                                                     <?php endif; ?>
@@ -175,13 +244,13 @@
                                             </table>
 
 
-                                            <?php if ($role == 1 && $status == 1): ?>
+                                            <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 1): ?>
                                                 <button type="submit" name="action" value="1" class="btn-lg btn-primary pull-left"> All selected make to In progress</button>
                                             <?php endif; ?>
-                                            <?php if ($role == 1 && $status == 2): ?>
+                                            <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 2): ?>
                                                 <button type="submit"name="action" value="2" class="btn-lg btn-primary pull-left"> All selected make to In house</button>
                                             <?php endif; ?>
-                                            <?php if ($role == 1 && $status == 4): ?>
+                                            <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 4): ?>
                                                 <div class="modal-body col-md-12">
                                                     <div class="form-group">
                                                         <label class="control-label col-md-3"><b>Please Select a Delivery man:</b></label>
@@ -203,7 +272,7 @@
                                                 </div>
                                                 <button type="submit"name="action" value="4" class="btn-lg btn-primary pull-left"> All selected Send out for delivery</button>
                                             <?php endif; ?>
-                                            <?php if ($role == 1 && $status == 6): ?>
+                                            <?php if (($role == 1 || $role == 5) && $status == 6): ?>
                                                 <div class="form-group">
                                                     <label class="control-label col-md-5"><b>Delivery Charge / price Collect From Delivery Man:</b></label>
                                                     <div class="control-label col-md-4">
@@ -351,7 +420,41 @@
         </div>
     </div>
 
+    <div class="modal fade fade modal-auto-clear" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header table-background">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    Alert !!
+                </div>
+                <form action="<?= base_url('Merchant/delete_order'); ?>" method="POST">
+                    <div class="modal-body col-md-12" >
+                        <input type="hidden" id="delete_id" name="delete_id" class="form-control">
+                        <p style="color:red; font-size: 25px;">Are you sure you want to delete this Request ?</p>
+                    </div>
+                    <div class="modal-footer ">
+
+                        <button type="submit" class="btn btn-primary">Yes
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function action_delete(id) {
+            var requestid = id;
+            $('#delete_id').val(requestid);
+            $('#deletemodal').modal('show');
+        }
+
+
         function isNumberKey(evt) {
             var charCode = (evt.which) ? evt.which : evt.keyCode
             return !(charCode > 31 && (charCode < 48 || charCode > 57));

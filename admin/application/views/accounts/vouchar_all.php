@@ -21,7 +21,7 @@
                         endif;
                         ?>
                         <div class="btn-group">
-                            <?php if ($this->session->userdata('user_role') == 1): ?>
+                            <?php if ($this->session->userdata('user_role') == 1 || $this->session->userdata('user_role') == 5): ?>
                                 <a href="<?= base_url('accounts/addvouchar'); ?>">
                                     <button type="button" class="btn btn-primary" data-toggle="modal">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>

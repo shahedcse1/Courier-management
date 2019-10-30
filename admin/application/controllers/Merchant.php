@@ -9,7 +9,7 @@ class Merchant extends CI_Controller {
     }
 
     public function makerequest_action() {
-        if (in_array($this->session->userdata('user_role'), array(1))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 5, 4))) :
             $ids = $this->input->post('request_id');
             $action = $this->input->post('action');
             if ($action == 1):
@@ -125,8 +125,31 @@ class Merchant extends CI_Controller {
         endif;
     }
 
-    function update_amount() {
+    function delete_order() {
         if (in_array($this->session->userdata('user_role'), array(1))) :
+            $id = $this->input->post('delete_id');
+            $reqdata = [
+                'final_status' => 12,
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('request', $reqdata);
+
+            $this->db->where('request_id', $id);
+            $status = $this->db->delete('accounts');
+
+            if ($status):
+                $this->session->set_userdata('add', 'Delete Successfully');
+            else:
+                $this->session->set_userdata('notadd', 'Delete failed');
+            endif;
+            redirect('merchant/requestlist/6');
+        else :
+            redirect('auth');
+        endif;
+    }
+
+    function update_amount() {
+        if (in_array($this->session->userdata('user_role'), array(1, 5))) :
             $id = $this->input->get('id');
             $amount = $this->input->get('amount');
             $reason = $this->input->get('reason');
@@ -199,7 +222,7 @@ class Merchant extends CI_Controller {
     }
 
     public function complainList() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3, 4))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'Complain List';
 
@@ -230,7 +253,7 @@ class Merchant extends CI_Controller {
     }
 
     public function complain_view() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3, 4))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'Complain View';
             $data['active_menu'] = 'merchant';
@@ -334,7 +357,7 @@ class Merchant extends CI_Controller {
     }
 
     public function requestlist($status = false) {
-        if (!in_array($this->session->userdata('user_role'), [1, 2, 3])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 2, 3, 4, 5])) {
             redirect('auth');
         }
 
@@ -374,12 +397,16 @@ class Merchant extends CI_Controller {
         if ($status) {
             $this->db
                     ->where('request.final_status', $status);
+            $data['requestinfo'] = $this->db
+                    ->order_by('request.id', 'asc')
+                    ->get()
+                    ->result();
+        } else {
+            $data['requestinfo'] = $this->db
+                    ->order_by('status.ordr_by', 'asc')
+                    ->get()
+                    ->result();
         }
-
-        $data['requestinfo'] = $this->db
-                ->order_by('status.ordr_by', 'asc')
-                ->get()
-                ->result();
 
 
         $this->load->view('common/header', $data);
@@ -442,7 +469,7 @@ class Merchant extends CI_Controller {
     }
 
     public function print_challan() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3, 5))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'Challan Copy';
             $data['role'] = $this->session->userdata('user_role');
@@ -555,7 +582,7 @@ class Merchant extends CI_Controller {
                 $this->session->set_userdata('notadd', 'Your Delivery Request is failed');
             }
 
-            redirect('merchant/requestlist');
+            redirect('merchant/requestlist/1');
         else :
             redirect('auth');
         endif;
@@ -664,7 +691,7 @@ class Merchant extends CI_Controller {
                 $this->session->set_userdata('notadd', 'Your Delivery Request is failed');
             }
 
-            redirect('merchant/requestlist');
+            redirect('merchant/requestlist/1');
         else :
             redirect('auth');
         endif;
@@ -963,7 +990,7 @@ class Merchant extends CI_Controller {
         else:
             $this->session->set_userdata('failed', 'Upload Request Failed.');
         endif;
-        redirect('merchant/requestlist');
+        redirect('merchant/requestlist/1');
     }
 
 }

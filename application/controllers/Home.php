@@ -102,6 +102,17 @@ class Home extends CI_Controller {
         }
 
         $phone = $this->input->post('user_phone');
+        $phonelength=strlen($phone);
+          if ($phonelength != 11) {
+            $response = [
+                'success' => false,
+                'error' => true,
+                'message' => 'Please provide your eleven digit number.'
+            ];
+
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            return;
+        }
 
         if (!$phone) {
             $response = [

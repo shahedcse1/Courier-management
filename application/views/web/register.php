@@ -209,16 +209,16 @@
 
                         <h4 style="text-align-last:center; text-decoration:underline;FONT-WEIGHT:BOLD;font-size: 25px; color: green ;">Login Information:  </h4>
                         <div class="demo">
-                            <p><button type="button" data-tooltip="Please give here an user pin and password as you want which will be use for future website login.keep remember in mind this user pin and password. ">Help Desk?</button></p>
+                            <p><button type="button" data-tooltip="Please give here an user Name and password as you want which will be use for future website login.keep remember in mind this user pin and password. ">Help Desk?</button></p>
                         </div>
                         <div class="form-group wow fadeInUp" data-wow-offset="50" data-wow-delay=".30s">
-                            <div class="col-sm-4 text-left"><label for="user_pin" class="title-2">User PIN:<span style="color:red">*</span></label>(website Login Pin)</div>
+                            <div class="col-sm-4 text-left"><label for="user_pin" class="title-2">User Name:<span style="color:red">*</span></label>(website Login Name)</div>
                             <div class="col-sm-8">
                                 <input type="text"
                                        style="color: black;"
                                        name="user_pin"
                                        id="user_pin" 
-                                       placeholder="Give a user PIN as you want"
+                                       placeholder="Give a user Name as you want"
                                        class="form-control">
                             </div>
                         </div>

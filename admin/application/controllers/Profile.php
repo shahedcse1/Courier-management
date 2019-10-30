@@ -12,7 +12,7 @@ class Profile extends CI_Controller {
 
     public function index() {
 
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3,4,5))) :
             $data['base_url'] = $this->config->item('base_url');
             $data['title'] = 'My Profile';
             $data['active_menu'] = 'profile';
@@ -33,7 +33,7 @@ class Profile extends CI_Controller {
     }
 
     public function edit() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3,4,5))) :
             $id = $this->input->post('id');
             $post['name'] = $this->input->post('name');
             $post['email'] = $this->input->post('email');
@@ -59,7 +59,7 @@ class Profile extends CI_Controller {
     }
 
     function updatePassword() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))):
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3,4,5))):
 
             $userpin = $this->session->userdata('user_pin');
             $currentpass = $this->input->post('cpassword');
@@ -92,7 +92,7 @@ class Profile extends CI_Controller {
     }
 
     function updateImage() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3))):
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3,4,5))):
 
             $userpin = $this->session->userdata('user_pin');
             $target_dir = "uploads/";

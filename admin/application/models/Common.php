@@ -64,6 +64,7 @@ class Common extends CI_Model {
         $this->db->from('users');
         $this->db->join('userrole', 'users.role= userrole.id');
         $this->db->WHERE('role', '2');
+        $this->db->order_by('id', 'DESC');
         $queryStr = $this->db->get()->result();
         return $queryStr;
     }

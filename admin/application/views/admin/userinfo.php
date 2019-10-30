@@ -145,7 +145,7 @@
                                                                        required>
                                                             </div>
                                                             <div class="form-group col-md-4">
-                                                                <label for="newUserPin">User Pin</label>
+                                                                <label for="newUserPin">User Name</label>
                                                                 <input type="text"
                                                                        class="form-control"
                                                                        name="user_pin"
@@ -315,7 +315,7 @@
                                                                        id="email" required>
                                                             </div>
                                                             <div class="form-group col-md-4">
-                                                                <label>User Pin</label>
+                                                                <label>User Name</label>
                                                                 <input type="text" class="form-control"
                                                                        name="user_pin" id="user_pin" required>
                                                                 <span id="pinval"></span>

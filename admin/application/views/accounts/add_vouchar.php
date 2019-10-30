@@ -5,7 +5,7 @@
         overflow-y: scroll;
     }
     #trackId2 {
-        height: 100px;
+        height: 150px;
         overflow-x: scroll;
         overflow-y: scroll;
     }
@@ -58,7 +58,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-2">Adjust due from cancel product:</label>
+                                        <label class="control-label col-md-2">Adjust due from cancel product/Due Charge:</label>
                                         <div class="col-md-6" style="background-color: #ecaab4; " id="trackId2"></div>
                                         <div class="col-md-4">
                                             <input type="text"
