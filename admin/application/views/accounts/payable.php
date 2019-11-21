@@ -34,6 +34,7 @@
                                                             <?php if ($payable->paidtomarchent == 0): ?>
                                                                 <?php if (!empty($payable->date)): ?>
                                                                     <button class="btn btn-primary btn-circle btn-xs requestPaid" title="Pay to Merchant"><i class="fa fa-money"></i></button>
+                                                                    <button class="btn btn-primary btn-circle btn-xs requestdelete" title="Delete"><i class="fa fa-crop"></i></button>
                                                                 <?php endif; ?>
                                                             <?php else: ?>
                                                                 <button class="btn btn-success btn-circle btn-xs " title="Pay to Merchant">Payment Completed</button>

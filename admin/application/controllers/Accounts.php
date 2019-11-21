@@ -11,7 +11,7 @@ class Accounts extends CI_Controller {
         parent::__construct();
         $this->load->model('common');
 
-        if (!in_array($this->session->userdata('user_role'), [1, 2, 3,4,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 2, 3, 4, 5])) {
             redirect('auth');
         }
     }
@@ -112,7 +112,7 @@ class Accounts extends CI_Controller {
     }
 
     public function addvouchardata() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
         $date = date('Y-m-d');
@@ -148,6 +148,7 @@ class Accounts extends CI_Controller {
             $allrequestmergre = array_merge($tracking_id, $tracking_id2);
             $allrequestid = implode(",", $allrequestmergre);
         else:
+            $allrequest_id2 = '';
             $this->db->query("UPDATE accounts SET paidtomarchent=1,paid_marchent_date='$date' WHERE id IN($allrequest_id)");
             $allrequestid = $allrequest_id;
         endif;
@@ -198,7 +199,7 @@ class Accounts extends CI_Controller {
     }
 
     function print_vouchar() {
-        if (in_array($this->session->userdata('user_role'), array(1, 2, 3,5))) :
+        if (in_array($this->session->userdata('user_role'), array(1, 2, 3, 5))) :
             $id = $this->input->get('id');
             $data['base_url'] = $this->config->item('base_url');
             $voucharQr = $this->db->query("SELECT vouchar_no FROM vouchar WHERE vouchar.id='$id'");
@@ -244,10 +245,10 @@ class Accounts extends CI_Controller {
                 //  ->where('accounts.collect_frmod', 1)
                 ->where('request.request_by', $userId)
                 ->where('request.deliverydate <>', '')
+                //  ->group_by('accounts.request_id')
                 ->order_by('request.tracking_id', 'asc')
                 ->get()
                 ->result();
-
         echo json_encode($payables, JSON_PRETTY_PRINT);
     }
 
@@ -261,8 +262,10 @@ class Accounts extends CI_Controller {
                 ->from('accounts')
                 ->join('request', 'accounts.request_id = request.id')
                 ->where('accounts.paidtomarchent', 0)
+                ->where('accounts.collect_frmod', 0)
                 ->where('request.request_by', $userId)
                 ->where_in('request.final_status ', array(7))
+                //  ->group_by('accounts.request_id')
                 ->order_by('request.tracking_id', 'asc')
                 ->get()
                 ->result();
@@ -277,6 +280,7 @@ class Accounts extends CI_Controller {
                 ->where('accounts.collect_frmod', 0)
                 ->where('request.request_by', $userId)
                 ->where_in('request.final_status ', array(5))
+                //  ->group_by('accounts.request_id')
                 ->order_by('request.tracking_id', 'asc')
                 ->get()
                 ->result();
@@ -403,11 +407,17 @@ class Accounts extends CI_Controller {
         echo true;
     }
 
+    public function deletepayable() {
+        $id = $this->input->post('id');
+        $this->db->where('id', $id);
+        $this->db->delete('Accounts');
+    }
+
     /**
      * Additional Cost
      */
     public function additionalCost() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
 
@@ -433,7 +443,7 @@ class Accounts extends CI_Controller {
     }
 
     public function cost_details() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
 
@@ -460,7 +470,7 @@ class Accounts extends CI_Controller {
     }
 
     public function newCost() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
 
@@ -488,7 +498,7 @@ class Accounts extends CI_Controller {
     }
 
     public function editCost($id = false) {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             $response = [
                 'success' => false,
                 'error' => true,
@@ -538,7 +548,7 @@ class Accounts extends CI_Controller {
     }
 
     public function updateCost() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
 
@@ -560,7 +570,7 @@ class Accounts extends CI_Controller {
     }
 
     public function deleteCost($id = false) {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             $response = [
                 'success' => false,
                 'error' => true,
@@ -596,7 +606,7 @@ class Accounts extends CI_Controller {
     }
 
     public function collectFromDeliveryMan() {
-        if (!in_array($this->session->userdata('user_role'), [1,5])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 5])) {
             redirect('auth');
         }
 

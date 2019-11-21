@@ -12,7 +12,7 @@
                         <div class="btn-group">
                             <a href="<?= base_url('accounts/additionalcost'); ?>">
                                 <button type="button" class="btn btn-primary"
-                                        <span class=" glyphicon-backward" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-backward " aria-hidden="true"></span>
                                     <- Back to Additional Cost
                                 </button>
                             </a>
@@ -44,6 +44,7 @@
                                                     <th class="text-center">Date</th>
                                                     <th class="text-center">Purpose</th>
                                                     <th class="text-center">Amount</th>
+                                                    <th class="text-center">Remarks</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -60,6 +61,7 @@
                                                         <td><?= $cost->date ? date("d F, Y", strtotime($cost->date)) : ''; ?></td>
                                                         <td><?= $cost->purpose ?></td>
                                                         <td>&#2547; <?= number_format($cost->amount, 2) ?></td>
+                                                        <td><?= $cost->remarks ?></td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>

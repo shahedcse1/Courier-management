@@ -151,11 +151,12 @@ class Merchant extends CI_Controller {
     function update_amount() {
         if (in_array($this->session->userdata('user_role'), array(1, 5))) :
             $id = $this->input->get('id');
+            $option = $this->input->get('option');
             $amount = $this->input->get('amount');
             $reason = $this->input->get('reason');
             $netprice = $this->db->query("SELECT netprice FROM accounts WHERE request_id='$id'")->row()->netprice;
-            $updateamount = $netprice - $amount;
-            if ($amount < $netprice):
+            if ($option == 1):
+                $updateamount = $netprice + $amount;
                 $amountdata = [
                     'netprice' => $updateamount,
                     'adjust_amount' => $amount,
@@ -169,22 +170,40 @@ class Merchant extends CI_Controller {
                 ];
                 $this->db->where('id', $id);
                 $this->db->Update('request', $amountdata1);
-            elseif ($amount == $netprice):
-                $amountdata = [
-                    'netprice' => $updateamount,
-                    'adjust_amount' => $amount,
-                    'adjust_reason' => $reason,
-                    'paidtomarchent' => 1
-                ];
-                $this->db->where('request_id', $id);
-                $this->db->Update('accounts', $amountdata);
+            else:
+                $updateamount = $netprice - $amount;
+                if ($amount < $netprice):
+                    $amountdata = [
+                        'netprice' => $updateamount,
+                        'adjust_amount' => $amount,
+                        'adjust_reason' => $reason
+                    ];
+                    $this->db->where('request_id', $id);
+                    $this->db->Update('accounts', $amountdata);
 
-                $amountdata1 = [
-                    'netprice' => $updateamount
-                ];
-                $this->db->where('id', $id);
-                $this->db->Update('request', $amountdata1);
+                    $amountdata1 = [
+                        'netprice' => $updateamount
+                    ];
+                    $this->db->where('id', $id);
+                    $this->db->Update('request', $amountdata1);
+                elseif ($amount == $netprice):
+                    $amountdata = [
+                        'netprice' => $updateamount,
+                        'adjust_amount' => $amount,
+                        'adjust_reason' => $reason,
+                        'paidtomarchent' => 1
+                    ];
+                    $this->db->where('request_id', $id);
+                    $this->db->Update('accounts', $amountdata);
+
+                    $amountdata1 = [
+                        'netprice' => $updateamount
+                    ];
+                    $this->db->where('id', $id);
+                    $this->db->Update('request', $amountdata1);
+                endif;
             endif;
+
         else :
             redirect('auth');
         endif;
@@ -234,12 +253,12 @@ class Merchant extends CI_Controller {
                 $data['active_menu'] = 'complainlist';
                 $data['sub_menu'] = '';
             endif;
-            $pin = $this->session->userdata('user_pin');
+            $id = $this->session->userdata('user_id');
             if ($role == 1 || $role == 3):
-                $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.user_pin=complain.created_by");
+                $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.id=complain.created_by order by id DESC");
                 $data['complains'] = $complainQr->result();
             else:
-                $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.user_pin=complain.created_by WHERE complain.created_by='$pin' ");
+                $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.id=complain.created_by WHERE complain.created_by='$id' order by id DESC ");
                 $data['complains'] = $complainQr->result();
             endif;
             $data['role'] = $role;
@@ -259,7 +278,7 @@ class Merchant extends CI_Controller {
             $data['active_menu'] = 'merchant';
             $data['sub_menu'] = 'complain';
             $id = $this->input->get('id');
-            $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.user_pin=complain.created_by WHERE complain.id='$id'");
+            $complainQr = $this->db->query("SELECT complain.*,users.name FROM complain JOIN users ON users.id=complain.created_by WHERE complain.id='$id'");
             $data['complains_view'] = $complainQr->row();
 
             $this->load->view('common/header', $data);
@@ -291,7 +310,7 @@ class Merchant extends CI_Controller {
         if (in_array($this->session->userdata('user_role'), array(1, 2, 3))) :
             $post['complain_title'] = $this->input->post('complain_title');
             $post['complain_details'] = $this->input->post('complain_details');
-            $post['created_by'] = $this->session->userdata("user_pin");
+            $post['created_by'] = $this->session->userdata("user_id");
             $post['created_date'] = date('Y-m-d H:i:s');
 
             $status = $this->common->add('complain', $post);
@@ -307,7 +326,7 @@ class Merchant extends CI_Controller {
     }
 
     public function allrequest_list($status = false) {
-        if (!in_array($this->session->userdata('user_role'), [1, 2, 3])) {
+        if (!in_array($this->session->userdata('user_role'), [1, 2, 3, 4, 5])) {
             redirect('auth');
         }
 
@@ -345,7 +364,7 @@ class Merchant extends CI_Controller {
                 ->where('request.request_by', $userId)
                 ->LIKE('request.createddate', $date);
         $data['requestinfo'] = $this->db
-                ->order_by('status.ordr_by', 'asc')
+                ->order_by('request.createddate', 'DESC')
                 ->get()
                 ->result();
 
@@ -369,9 +388,10 @@ class Merchant extends CI_Controller {
         $data['active_menu'] = $role == 2 ? 'merchant' : 'requestlist';
         $data['sub_menu'] = $role == 2 ? 'request' : '';
         $data['status'] = $status;
+        $data['zones'] = $this->common->viewAll('zone');
         $deliverymanqr = $this->db->query("SELECT * FROM staffs WHERE category=3 order by name asc");
         $data['deliveryman'] = $deliverymanqr->result();
-
+        $zoneid = $this->input->post('zoneid');
         $userId = $this->session->userdata("user_id");
 
         $this->db
@@ -394,6 +414,10 @@ class Merchant extends CI_Controller {
                     ->where('request.request_by', $userId);
         }
 
+        if ($zoneid) {
+            $this->db
+                    ->where('request.zoneid', $zoneid);
+        }
         if ($status) {
             $this->db
                     ->where('request.final_status', $status);
@@ -437,7 +461,7 @@ class Merchant extends CI_Controller {
     }
 
     public function editrequest($id, $status = false) {
-        if (!in_array($this->session->userdata('user_role'), array(1, 2, 3))) {
+        if (!in_array($this->session->userdata('user_role'), array(1, 2, 3, 4, 5))) {
             redirect('auth');
         }
 
@@ -556,8 +580,8 @@ class Merchant extends CI_Controller {
 // Get full html:
                 $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <title>' . html_escape($subject) . '</title>
     <style type="text/css">
         body {
@@ -666,7 +690,7 @@ class Merchant extends CI_Controller {
                 $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    
     <title>' . html_escape($subject) . '</title>
     <style type="text/css">
         body {
@@ -775,6 +799,7 @@ class Merchant extends CI_Controller {
                 elseif ($status == 6):
                     $requestData = array(
                         'final_status' => $status,
+                        'delivery_cost' => $this->input->post('delivery_cost'),
                         'delivery_man' => $this->input->post('delivery_man'),
                         'outfordeliverydate' => date('Y-m-d')
                     );
@@ -799,42 +824,32 @@ class Merchant extends CI_Controller {
                     );
                     $this->db->where('request_id', $id);
                     $this->db->update('accounts', $accountsData);
+                    require APPPATH . 'third_party/sendgrid-php-7.2.1/vendor/autoload.php'; // If you're using Composer (recommended)
+                    $email = new \SendGrid\Mail\Mail();
+                    $email->setFrom("salehoyon@hotmail.com", "Saleh Ahmad");
+                    $email->setSubject("Parcel Delivered");
+                    $email->addTo("nissongo102@gmail.com", "ESaleh Ahmad\"");
+                    $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+                    $email->addContent(
+                            "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
+                    );
+                    $sendgrid = new \SendGrid(getenv('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'));
+                    try {
+                        $response = $sendgrid->send($email);
+                    } catch (Exception $e) {
+                        echo 'Caught exception: ' . $e->getMessage() . "\n";
+                    }
+
                 endif;
             endif;
             $this->db->where('id', $id);
             $status_update = $this->db->update('request', $requestData);
-            if ($status == 5):
-                /**
-                 * Send Email
-                 */
-                require APPPATH . 'third_party/sendgrid-php-7.2.1/vendor/autoload.php'; // If you're using Composer (recommended)
-// Comment out the above line if not using Composer
-// require("<PATH TO>/sendgrid-php.php");
-// If not using Composer, uncomment the above line and
-// download sendgrid-php.zip from the latest release here,
-// replacing <PATH TO> with the path to the sendgrid-php.php file,
-// which is included in the download:
-// https://github.com/sendgrid/sendgrid-php/releases
-                $email = new \SendGrid\Mail\Mail();
-                $email->setFrom("salehoyon@hotmail.com", "Saleh Ahmad");
-                $email->setSubject("Parcel Delivered");
-                $email->addTo("nissongo102@gmail.com", "ESaleh Ahmad\"");
-                $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-                $email->addContent(
-                        "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
-                );
-                $sendgrid = new \SendGrid(getenv('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'));
-                try {
-                    $response = $sendgrid->send($email);
-                } catch (Exception $e) {
-                    echo 'Caught exception: ' . $e->getMessage() . "\n";
-                }
-            endif;
+
             if ($status_update):
 //email
                 $this->session->set_userdata('add', 'Delivery Request is Updated Successfully');
             else:
-                $this->session->set_userdata('notadd', 'Delivery Request is Update failed');
+                $this->session->set_userdata('notadd', 'Delivery Request  Update failed');
             endif;
             redirect('merchant/requestlist/' . $statusId);
         else :
@@ -950,7 +965,7 @@ class Merchant extends CI_Controller {
                         $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    
     <title>' . html_escape($subject) . '</title>
     <style type="text/css">
                             body {

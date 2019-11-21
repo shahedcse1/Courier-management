@@ -70,7 +70,30 @@
                         </div>
                     </div>
                     <div class="portlet-body">
-
+                        <?php if ($status == 6 || $status == 4): ?>
+                            <form action="<?= base_url('Merchant/requestlist/' . $status); ?>" method="POST">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label class="control-label col-md-3"><b>Select Zone:</b></label>
+                                    <div class="col-md-4">
+                                        <select  name="zoneid" id="zoneid" required  class="form-control">
+                                            <option value="">Select</option>
+                                            <?php
+                                            if (isset($zones)):
+                                                foreach ($zones AS $value):
+                                                    ?>
+                                                    <option value="<?= $value->id; ?>"><?= $value->zone_name; ?></option>
+                                                    <?php
+                                                endforeach;
+                                            endif;
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-default btn-sm" type="submit">
+                                        <i class="glyphicon glyphicon-search"></i> Search
+                                    </button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
                         <div class="btn-group">
                             <?php if ($role == 2): ?>
                                 <a href="<?= base_url('merchant/makerequest'); ?>" class="linkstyle">
@@ -81,7 +104,7 @@
                             <?php endif; ?>
                         </div>
 
-                        <br><br>
+                        <br>
                         <?php
                         if ($this->session->userdata('add')):
                             echo '<div class="alert alert-success fade in"><button data-dismiss="alert" class="close close-sm" type="button"><i class="fa fa-times"></i></button><strong>Congrats !!! </strong> ' . $this->session->userdata('add') . '</div>' . '<br>' . '<br>';
@@ -93,6 +116,7 @@
                         else:
                         endif;
                         ?>
+
                         <?php
                         if ($this->session->userdata('successfull')):
                             echo '<div class="alert alert-success fade in"><button data-dismiss="alert" class="close close-sm" type="button"><i class="fa fa-times"></i></button><strong>Success Message !!! </strong> ' . $this->session->userdata('successfull') . '</div>';
@@ -106,13 +130,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-                                <?php if ($role == 1 && !empty($status)): ?>
+                                <?php if (($role == 1 || $role == 4 || $role == 5) && !empty($status)): ?>
                                     <center>  <button id="checkall" class="btn-lg btn-success" data-checked='false'>check/uncheck all request</button></center>
                                 <?php endif; ?>
                                 <div class="portlet ">
                                     <div class="portlet-body">
-
-                                        <form method="post" action="<?= base_url('merchant/makerequest_action'); ?>">
+                                        <form method="post" id="process" action="<?= base_url('merchant/makerequest_action'); ?>">
                                             <table class="table table-striped table-bordered table-hover text-center"
                                                    id="sample_1">
                                                 <thead class="table-background">
@@ -129,7 +152,7 @@
                                                         <th class="text-center">Payable<br>Amount</th>
                                                         <th class="text-center">Status</th>
 
-                                                        <?php if ($role == 1 && ($status == 6 || $status == 7)): ?>
+                                                        <?php if (($role == 1 || $role == 4 || $role == 5) && ($status == 6 || $status == 7)): ?>
                                                             <th class="text-center">Delivery Man</th>
                                                         <?php endif; ?>
                                                         <th class="text-center">Option</th>
@@ -155,7 +178,7 @@
                                                                 <td><?= $value->company_name; ?><br>(<?= $value->phone; ?>)</td>
                                                                 <td><?= $value->order_no; ?></td>
                                                                 <td>
-                                                                    <?php if ($role == 1 && ($status == 1 || $status == 2 || $status == 4 || $status == 6)): ?>
+                                                                    <?php if (($role == 1 || $role == 4 || $role == 5) && ($status == 1 || $status == 2 || $status == 4 || $status == 6)): ?>
 
                                                                         <?= $value->tracking_id; ?>  - <input type="checkbox" id="request_id" name="request_id[]" value="<?= $value->id ?>">
 
@@ -197,7 +220,7 @@
                                                                     <?php endif; ?>
                                                                 </td>
 
-                                                                <?php if ($role == 1 && ($status == 6 || $status == 7)): ?>
+                                                                <?php if (($role == 1 || $role == 4 || $role == 5) && ($status == 6 || $status == 7)): ?>
                                                                     <td>
                                                                         <?php
                                                                         if (!empty($value->delivery_man)):
@@ -245,10 +268,10 @@
 
 
                                             <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 1): ?>
-                                                <button type="submit" name="action" value="1" class="btn-lg btn-primary pull-left"> All selected make to In progress</button>
+                                                <button type="submit" name="action" value="1" class="btn-lg btn-primary pull-left" id="add1"> All selected make to In progress</button>
                                             <?php endif; ?>
                                             <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 2): ?>
-                                                <button type="submit"name="action" value="2" class="btn-lg btn-primary pull-left"> All selected make to In house</button>
+                                                <button type="submit"name="action" value="2" class="btn-lg btn-primary pull-left" id="add2"> All selected make to In house</button>
                                             <?php endif; ?>
                                             <?php if (($role == 1 || $role == 3 || $role == 4) && $status == 4): ?>
                                                 <div class="modal-body col-md-12">
@@ -270,7 +293,7 @@
                                                     </div>
 
                                                 </div>
-                                                <button type="submit"name="action" value="4" class="btn-lg btn-primary pull-left"> All selected Send out for delivery</button>
+                                                <button type="submit"name="action" value="4" class="btn-lg btn-primary pull-left" id="add3"> All selected Send out for delivery</button>
                                             <?php endif; ?>
                                             <?php if (($role == 1 || $role == 5) && $status == 6): ?>
                                                 <div class="form-group">
@@ -280,7 +303,7 @@
                                                     </div>
                                                 </div><br>
                                                 <!--                                                <button type="submit"name="action" value="7" class="btn-lg btn-danger pull-left"> All selected canceled by customer</button>&nbsp;&nbsp;-->
-                                                <button type="submit"name="action" value="5" class="btn-lg btn-primary pull-left"> All selected make to delivered</button>
+                                                <button type="submit"name="action" value="5" class="btn-lg btn-primary pull-left" id="add4"> All selected make to delivered</button>
                                             <?php endif; ?>
                                         </form>
                                     </div>
@@ -398,8 +421,16 @@
                     Please add adjust details.
                 </div>
                 <div class="modal-body col-md-12"style="color:black;">
-                    <h2>(N.B: You can not adjust more than  payable amount.)</h2>
+                    <h2 style="color:red;">(N.B: You can not adjust more than  payable for amount subtraction.)</h2>
                     <input type="hidden" id="req_id3" name="req_id3" class="form-control">
+                    <label class="control-label col-md-5"><b>Adjust Option:</b></label>
+                    <div class="control-label col-md-6">
+                        <select  class="form-control"  required="" name="adjust_option" id="adjust_option" >
+                            <option value="">-Select-</option>
+                            <option  style="color:green;"value="1">Amount Addition(+)</option>
+                            <option style="color:red;" value="2">Amount Subtraction (-)</option>
+                        </select>
+                    </div><br><br>
                     <label class="control-label col-md-5"><b>Adjust Amount :</b></label>
                     <div class="control-label col-md-6">
                         <input type="text" class="form-control" onkeypress="return isNumberKey(event);" required="" name="adjust_amount" id="adjust_amount" >
@@ -448,6 +479,12 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+            $("#process").submit(function() {
+                $("#add3").attr("disabled", true);
+                return true;
+            });
+        });
         function action_delete(id) {
             var requestid = id;
             $('#delete_id').val(requestid);
@@ -468,6 +505,7 @@
 
         function update_amount() {
             var id = $("#req_id3").val();
+            var option = $("#adjust_option").val();
             var amount = $("#adjust_amount").val();
             var reason = $("#adjust_reason").val();
             if (amount == '' || reason == '') {
@@ -480,7 +518,8 @@
                     data: {
                         id: id,
                         amount: amount,
-                        reason: reason
+                        reason: reason,
+                        option: option
 
                     }
                 });

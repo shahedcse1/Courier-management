@@ -85,7 +85,7 @@
                                         <label for="amount" class="control-label col-md-2"></label>
 
                                         <div class="col-md-4">
-                                            <button type="button"  onclick="calculate_cod();" class="btn btn-success btn-large">Calculate Total Amount</button>
+                                            <button type="button" id="total"  onclick="calculate_cod();" class="btn btn-success btn-large">Calculate Total Amount</button>
                                         </div>
 
 
@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" id="submit1" class="btn btn-primary">Submit</button>
                                         <button type="reset" class="btn btn-danger">Reset</button>
                                     </div>
                                 </div>
@@ -145,6 +145,22 @@
 </div>
 <script src="<?= base_url('assets/global/plugins/bootstrap-summernote/summernote.min.js') ?>" type="text/javascript"></script>
 <script>
+
+                                                $("#submit1").prop("disabled", true);
+                                                $(document).ready(function() {
+
+                                                    $('#total').click(function() {
+                                                        var total = $("#amount4").val();
+                                                        if (total != '') {
+                                                            $("#submit1").prop("disabled", false);
+                                                        }
+                                                        else {
+                                                            $("#amount4").val('');
+                                                            alert('Please select payable tracking id first.');
+                                                        }
+                                                    });
+                                                });
+
                                                 function isNumberKey(evt) {
                                                     var charCode = (evt.which) ? evt.which : evt.keyCode
                                                     return !(charCode > 31 && (charCode < 48 || charCode > 57));

@@ -500,46 +500,50 @@
         </div>
         <script src="<?= base_url('assets/js/custom/staffinfo.js'); ?>" type="text/javascript"></script>
         <script>
+                                                                    $(function() {
+                                                                        $("#add").click(function() {
+                                                                            $("#add").attr("disabled", true);
+                                                                        });
+                                                                    });
+                                                                    (function($) {
+                                                                        "use strict";
+                                                                        var itemTemplate = $('.example-template').detach(),
+                                                                                editArea = $('.edit-area'),
+                                                                                itemNumber = 1;
 
-                                                                        (function($) {
-                                                                            "use strict";
-                                                                            var itemTemplate = $('.example-template').detach(),
-                                                                                    editArea = $('.edit-area'),
-                                                                                    itemNumber = 1;
-
-                                                                            $(document).on('click', '.edit-area .add', function(event) {
-                                                                                var item = itemTemplate.clone();
-                                                                                item.find('[name]').attr('name', function() {
-                                                                                    return $(this).attr('name') + '_' + itemNumber;
-                                                                                });
-                                                                                ++itemNumber;
-                                                                                item.appendTo(editArea);
+                                                                        $(document).on('click', '.edit-area .add', function(event) {
+                                                                            var item = itemTemplate.clone();
+                                                                            item.find('[name]').attr('name', function() {
+                                                                                return $(this).attr('name') + '_' + itemNumber;
                                                                             });
+                                                                            ++itemNumber;
+                                                                            item.appendTo(editArea);
+                                                                        });
 
-                                                                            $(document).on('click', '.edit-area .rem', function(event) {
-                                                                                editArea.children('.example-template').last().remove();
-                                                                            });
+                                                                        $(document).on('click', '.edit-area .rem', function(event) {
+                                                                            editArea.children('.example-template').last().remove();
+                                                                        });
 
-                                                                            $(document).on('click', '.edit-area .del', function(event) {
-                                                                                var target = $(event.target),
-                                                                                        row = target.closest('.example-template');
-                                                                                row.remove();
-                                                                            });
-                                                                        }(jQuery));
-                                                                        function openCity(evt, cityName) {
-                                                                            var i, tabcontent, tablinks;
-                                                                            tabcontent = document.getElementsByClassName("tabcontent");
-                                                                            for (i = 0; i < tabcontent.length; i++) {
-                                                                                tabcontent[i].style.display = "none";
-                                                                            }
-                                                                            tablinks = document.getElementsByClassName("tablinks");
-                                                                            for (i = 0; i < tablinks.length; i++) {
-                                                                                tablinks[i].className = tablinks[i].className.replace(" active", "");
-                                                                            }
-                                                                            document.getElementById(cityName).style.display = "block";
-                                                                            evt.currentTarget.className += " active";
+                                                                        $(document).on('click', '.edit-area .del', function(event) {
+                                                                            var target = $(event.target),
+                                                                                    row = target.closest('.example-template');
+                                                                            row.remove();
+                                                                        });
+                                                                    }(jQuery));
+                                                                    function openCity(evt, cityName) {
+                                                                        var i, tabcontent, tablinks;
+                                                                        tabcontent = document.getElementsByClassName("tabcontent");
+                                                                        for (i = 0; i < tabcontent.length; i++) {
+                                                                            tabcontent[i].style.display = "none";
                                                                         }
-                                                                        document.getElementById("active").click();
+                                                                        tablinks = document.getElementsByClassName("tablinks");
+                                                                        for (i = 0; i < tablinks.length; i++) {
+                                                                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                                                                        }
+                                                                        document.getElementById(cityName).style.display = "block";
+                                                                        evt.currentTarget.className += " active";
+                                                                    }
+                                                                    document.getElementById("active").click();
 
         </script>
 
